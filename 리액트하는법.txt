@@ -1,0 +1,33 @@
+npm init react-app 폴더명
+npm start 하면 index.js파일이 제일먼저 실행됨
+
+npx create-react-app kossie_coder_react_basic
+
+//새로 타입스크립트용 프로젝트 생성
+npx create-react-app my-app --template typescript
+
+npm install react-router-dom@6 redux react-redux  @reduxjs/toolkit
+npm install @mui/material @emotion/react @emotion/styled  @mui/icons-material
+npm install typescript @types/node @types/react @types/react-dom @types/jest @types/react-router-dom  @types/redux @types/react-redux
+
+
+tsc -w  :타입스크립트 돌려주는 명령어
+
+
+
+//Vue 프로젝트에서 Typescript 사용할 경우
+
+1. 작업폴더경로에서 터미널을 오픈하신 후 
+
+vue add typescript
+입력하면 라이브러리가 설치됩니다. 
+ 
+
+2. 이제 vue파일에서 타입스크립트를 쓰려면 
+
+<script lang="ts">
+  
+</script>
+이렇게 lang 옵션을 켜두고 쓰면 알아서 잘 됩니다.
+
+Vue 프로젝트 내에서도 tsconfig.json 파일 만들어서 설정도 자유롭게 가능합니다
