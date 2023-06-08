@@ -3,7 +3,7 @@ import MainPage from "../pages/mainPage/MainPage";
 
 const mainRoutes = [
   {
-    path: "/main",
+    path: "/",
     component: MainPage,
   },
 
