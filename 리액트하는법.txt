@@ -7,7 +7,7 @@ npx create-react-app kossie_coder_react_basic
 npx create-react-app my-app --template typescript
 
 npm install react-router-dom@6 redux react-redux  @reduxjs/toolkit react-bootstrap bootstrap
-npm install @mui/material @emotion/react @emotion/styled  @mui/icons-material @material-ui/core
+npm install @mui/material @emotion/react @emotion/styled  @mui/icons-material
 npm install typescript @types/node @types/react @types/react-dom @types/jest @types/react-router-dom  @types/redux @types/react-redux
 
 

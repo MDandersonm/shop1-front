@@ -2,7 +2,7 @@ import React from "react";
 import { Link, NavLink } from "react-router-dom";
 const Navbar: React.FC = () => {
   return (
-    <nav className="navbar bg-light">
+    <nav className="navbar bg-light mb-5">
       <div className="container-fluid">
         <div className="d-flex justify-content-between w-100">
           <ul className="navbar-nav">
@@ -14,7 +14,7 @@ const Navbar: React.FC = () => {
           </ul>
           <ul className="navbar-nav">
             <li className="nav-item">
-              <NavLink className="nav-link" to="/ts1">
+              <NavLink className="nav-link" to="/product-list">
                 축구화
               </NavLink>
             </li>
