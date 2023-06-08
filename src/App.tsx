@@ -7,7 +7,6 @@ import routes from "./router/routes";
 const App: React.FC = () => {
   return (
     <div className="App">
-      <div className="container mt-5">
         <Navbar/>
         <Routes>
           {routes.map((route) => {
@@ -20,7 +19,6 @@ const App: React.FC = () => {
             );
           })}
         </Routes>
-      </div>
     </div>
   );
 };
