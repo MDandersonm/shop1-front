@@ -27,7 +27,7 @@ const Navbar: React.FC = () => {
                 activeClassName="active-link"
                 className="nav-link"
               >
-                <span className="h5">축구화</span>
+                <span className="h5" style={{fontWeight: "bold"}}>축구화</span>
               </ActiveNavLink>
             </li>
           </ul>
