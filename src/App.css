@@ -1,3 +1,13 @@
+.active-link {
+  color: #1565c0 !important;
+  text-decoration: none;
+}
+.nav-link {
+  text-decoration: none;  
+}
+
+
+
 /* .App {
   text-align: center;
 }

@@ -8,7 +8,6 @@ const App: React.FC = () => {
   return (
     <div className="App">
         <Navbar/>
-        <div className="container">
         <Routes>
           {routes.map((route) => {
             return (
@@ -20,7 +19,6 @@ const App: React.FC = () => {
             );
           })}
         </Routes>
-        </div>
     </div>
   );
 };
