@@ -5,9 +5,9 @@ import ProductListForm from "../../components/product/productListForm";
 const ProductListPage: React.FC = () => {
 
   return (
-    <React.Fragment>
+    <div className="container mt-5">
     <ProductListForm></ProductListForm>
-    </React.Fragment>
+    </div>
   );
 };
 
