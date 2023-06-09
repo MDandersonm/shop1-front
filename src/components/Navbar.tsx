@@ -30,7 +30,7 @@ const Navbar: React.FC = () => {
               </NavLink>
             </li>
             <li className="nav-item mx-5">
-              <NavLink className="nav-link  d-flex align-items-center" to="/ts1">
+              <NavLink className="nav-link  d-flex align-items-center" to="/sign-in">
               <ExitToAppIcon className="mx-2"/><span className="">로그인</span>
               </NavLink>
             </li>
