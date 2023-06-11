@@ -2,10 +2,10 @@
 
 import mainRoutes from "./MainRoutes";
 import productRoutes from "./productRoutes";
-import memberRoutes from "./memberRoutes";
+import userRoutes from "./userRoutes";
 export default [
  
   ...mainRoutes,
   ...productRoutes,
-  ...memberRoutes,
+  ...userRoutes,
 ];

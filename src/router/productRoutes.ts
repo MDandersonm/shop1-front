@@ -1,4 +1,4 @@
-import ProductListPage from "../pages/productPage/productListPage";
+import ProductListPage from "../pages/product/productListPage";
 
 
 const productRoutes = [
