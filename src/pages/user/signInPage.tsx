@@ -1,4 +1,11 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { ThunkDispatch } from "redux-thunk";
+import { AnyAction } from "redux";
+import { RootState } from "@/redux/reducers";
+import { signIn } from "../../redux/actions/userActions";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -34,13 +41,26 @@ function Copyright(props: any) {
 // TODO remove, this demo shouldn't need to reset the theme.
 // const defaultTheme = createTheme();
 const SignInPage: React.FC = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+  const dispatch: ThunkDispatch<RootState, unknown, AnyAction> = useDispatch();
+  const user = useSelector((state: RootState) => state.user); // Get the current user state
+  if (user.isLoggedIn) {
+    // After dispatch, if the user is logged in
+    navigate("/"); // navigate to the home page
+  }
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const userData = {
+      email: data.get("email") as string,
+      password: data.get("password") as string,
+    };
+
+    console.log("signin-handleSubmit메서드 작동");
+    console.log("userData:", userData);
+    await dispatch(signIn(userData));
+    console.log("user.isLoggedIn:",user.isLoggedIn)
+ 
   };
   return (
     // <ThemeProvider theme={defaultTheme}>
