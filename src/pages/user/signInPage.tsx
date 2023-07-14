@@ -44,10 +44,12 @@ const SignInPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch: ThunkDispatch<RootState, unknown, AnyAction> = useDispatch();
   const user = useSelector((state: RootState) => state.user); // Get the current user state
-  if (user.isLoggedIn) {
-    // After dispatch, if the user is logged in
-    navigate("/"); // navigate to the home page
-  }
+  React.useEffect(() => {
+    if (user.isLoggedIn) {
+      navigate("/");
+    }
+  }, [user.isLoggedIn, navigate]);
+  
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
