@@ -6,7 +6,7 @@ import ActiveNavLink from "./ActiveNavLink";
 
 const Navbar: React.FC = () => {
   return (
-    <nav className="navbar navbar-custom" style={{ height: "100px" }}>
+    <nav className="navbar navbar-custom" style={{ height: "100px" , minWidth: "800px"  }}>
       <div className="container-fluid">
         <div className="d-flex justify-content-between w-100 align-items-center">
           <ul className="navbar-nav">
@@ -20,15 +20,24 @@ const Navbar: React.FC = () => {
               </Link>
             </li>
           </ul>
-          <ul className="navbar-nav">
+          <ul className="navbar-nav  d-flex flex-row">
             <li className="nav-item">
               <ActiveNavLink
                 to="/product-list"
                 activeClassName="active-link"
                 className="nav-link"
               >
-                <span className="h5" style={{fontWeight: "bold"}}>축구화</span>
+                <span className="h5" style={{ fontWeight: "bold" }}>
+                  축구화
+                </span>
               </ActiveNavLink>
+            </li>
+            <li className="nav-item mx-5">
+              <NavLink className="nav-link" to="/userOnly/product-test">
+                <span className="h5" style={{ fontWeight: "bold" }}>
+                  테스트
+                </span>
+              </NavLink>
             </li>
           </ul>
 
