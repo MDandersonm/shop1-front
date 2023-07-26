@@ -21,7 +21,7 @@ import { signUp } from "../../redux/actions/userActions";
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { RootState } from "@/redux/reducers";
-
+import { useNavigate } from 'react-router-dom';
 
 
 const Copyright = (props: any) => {
@@ -46,6 +46,8 @@ const Copyright = (props: any) => {
 // const defaultTheme = createTheme();
 
 export const SignUpPage: React.FC = () => {
+  const navigate = useNavigate();
+
   const [isChecked, setIsChecked] = useState(false);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,7 +83,7 @@ export const SignUpPage: React.FC = () => {
       username: data.get("username") as string,
     };
     console.log("signup-handleSubmit메서드 작동")
-    dispatch(signUp(userData));
+        dispatch(signUp(userData, navigate));
   };
   // console.log({
   //   email: data.get("email"),

@@ -5,9 +5,8 @@ import { RootState } from '../reducers';
 import { User, SIGN_IN, SignInPayload } from '../types/userTypes'; // userTypes.ts에서 타입들을 가져옵니다.
 import mainRequest from "../../api/mainRequest";
 
-
 export const signUp =
-  (userData: User): ThunkAction<void, RootState, unknown, Action<string>> => async (dispatch, getState) => {
+  (userData: User, navigate: (path: string) => void): ThunkAction<void, RootState, unknown, Action<string>> => async (dispatch, getState) => {
     try {
       console.log("signUp-try")
 
@@ -18,6 +17,7 @@ export const signUp =
       alert('회원가입 성공');
       // if (getState().user.isLoggedIn) {
       // }
+      navigate("/sign-in"); 
     } catch (error) {
       console.log("sign up실패!")
       console.error(error);
