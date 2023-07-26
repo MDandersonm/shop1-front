@@ -44,7 +44,7 @@ const SignInPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch: ThunkDispatch<RootState, unknown, AnyAction> = useDispatch();
   const user = useSelector((state: RootState) => state.user); // Get the current user state
-  React.useEffect(() => {
+  React.useEffect(() => {//로그인이 성공하면 메인페이지로 이동
     if (user.isLoggedIn) {
       navigate("/");
     }
