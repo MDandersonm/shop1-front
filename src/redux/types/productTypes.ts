@@ -5,7 +5,7 @@ export interface IProduct {
     name: string;
     brand: string;
     price: string;
-    image: string;
+    image?:string;
   }
   
 

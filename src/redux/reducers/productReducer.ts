@@ -12,7 +12,7 @@ import {
     error: null
   };
   
-  const productReducer = (state = initialState, action: ProductActionTypes): ProductState => {
+  export const productReducer = (state = initialState, action: ProductActionTypes): ProductState => {
     switch (action.type) {
       case SAVE_PRODUCT_REQUEST:
         return {

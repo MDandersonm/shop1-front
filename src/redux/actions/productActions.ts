@@ -3,6 +3,10 @@ import mainRequest from "../../api/mainRequest";
 import { Action } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "../reducers";
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from 'redux';
+
+
 import {
   SAVE_PRODUCT_REQUEST,
   SAVE_PRODUCT_SUCCESS,
@@ -16,41 +20,70 @@ interface ApiResponse {
   message: string;
 }
 
-export const saveProduct =
-  (product: IProduct): ThunkAction<void, RootState, unknown, Action<string>> =>
-  async (dispatch) => {
-    dispatch(saveProductRequest());
-    try {
-      const response = await mainRequest.post("/products/register", product);
-      dispatch(saveProductSuccess(response.data));
-      alert("상품 저장 성공");
-    } catch (error) {
-      const axiosError = error as AxiosError<ApiResponse>;
-      const errorMessage =
-        axiosError?.response?.data.message || "Unknown error";
-
-      // dispatch(saveProductFailure(errorMessage));
-      console.error(errorMessage);
-      alert(errorMessage);
+export const saveProduct = (product: IProduct, imageFile: File | null, navigate: (path: string) => void) => async (dispatch: ThunkDispatch<RootState, unknown, AnyAction>) => {
+  try {
+    const formData = new FormData();
+    if (imageFile) {
+      formData.append('image', imageFile);
     }
-  };
+    formData.append(
+      "product",
+      new Blob([JSON.stringify(product)], {
+        type: "application/json",
+      })
+    );
 
-const saveProductRequest = (): ProductActionTypes => {
-  return {
-    type: SAVE_PRODUCT_REQUEST,
-  };
+    const response = await mainRequest.post("/products/register", formData);
+
+    if (response.status !== 200) {
+      throw new Error('상품 저장 실패');
+    }
+
+    const data = response.data; // axios는 자동으로 JSON을 파싱
+    console.log(data);
+    navigate("/product-list");
+
+  } catch (error) {
+    console.error('상품 저장 중 오류:', error);
+  }
 };
 
-const saveProductSuccess = (data: IProduct): ProductActionTypes => {
-  return {
-    type: SAVE_PRODUCT_SUCCESS,
-    payload: data,
-  };
-};
 
-const saveProductFailure = (error: string): ProductActionTypes => {
-  return {
-    type: SAVE_PRODUCT_FAILURE,
-    payload: error,
-  };
-};
+// export const saveProduct =
+//   (product: IProduct): ThunkAction<void, RootState, unknown, Action<string>> =>
+//   async (dispatch) => {
+//     dispatch(saveProductRequest());
+//     try {
+//       const response = await mainRequest.post("/products/register", product);
+//       dispatch(saveProductSuccess(response.data));
+//       alert("상품 저장 성공");
+//     } catch (error) {
+//       const axiosError = error as AxiosError<ApiResponse>;
+//       const errorMessage =
+//         axiosError?.response?.data.message || "Unknown error";
+
+//       // dispatch(saveProductFailure(errorMessage));
+//       console.error(errorMessage);
+//       alert(errorMessage);
+//     }
+//   };
+
+// const saveProductRequest = (): ProductActionTypes => {
+//   return {
+//     type: SAVE_PRODUCT_REQUEST,
+//   };
+// };
+
+// const saveProductSuccess = (data: IProduct): ProductActionTypes => {
+//   return {
+//     type: SAVE_PRODUCT_SUCCESS,
+//     payload: data,
+//   };
+// };
+
+// const saveProductFailure = (error: string): ProductActionTypes => {
+//   return {
+//     type: SAVE_PRODUCT_FAILURE,
+//     payload: error,
+//   };
+// };

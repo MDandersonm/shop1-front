@@ -9,7 +9,9 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { RootState } from "@/redux/reducers";
 
+import { useNavigate } from 'react-router-dom';
 const ProductRegisterForm: React.FC = () => {
+  const navigate = useNavigate();
   const dispatch: ThunkDispatch<RootState, unknown, AnyAction> = useDispatch();
 
   const [product, setProduct] = useState<IProduct>({
@@ -17,16 +19,17 @@ const ProductRegisterForm: React.FC = () => {
     name: "",
     brand: "",
     price: "",
-    image: "",
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
   const [previewImage, setPreviewImage] = useState<string | ArrayBuffer | null>(
     null
   );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    console.log("name",name);
-    console.log("value",value);
+    console.log("name", name);
+    console.log("value", value);
 
     setProduct((prev) => ({
       ...prev,
@@ -40,16 +43,20 @@ const ProductRegisterForm: React.FC = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreviewImage(reader.result);
+        setImageFile(file);  // 파일 상태 업데이트
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleSubmit = () => {
-    console.log(product);
-    dispatch(saveProduct(product));
 
+  const handleSubmit = () => {
+    // 이미지와 상품 정보를 saveProduct 액션에 전달
+    dispatch(saveProduct(product, imageFile, navigate));
   };
+
+
+
 
   return (
     <Box
@@ -91,7 +98,7 @@ const ProductRegisterForm: React.FC = () => {
             name="name"
             value={product.name}
             onChange={handleChange}
-            // margin="normal"
+          // margin="normal"
           />
           <TextField
             label="브랜드"
