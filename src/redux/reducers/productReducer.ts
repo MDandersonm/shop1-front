@@ -3,12 +3,16 @@ import {
     SAVE_PRODUCT_SUCCESS,
     SAVE_PRODUCT_FAILURE,
     ProductState,
-    ProductActionTypes
+    ProductActionTypes,
+    FETCH_PRODUCTS_REQUEST,
+    FETCH_PRODUCTS_SUCCESS,
+    FETCH_PRODUCTS_FAILURE
   } from '../types/productTypes';
   
   const initialState: ProductState = {
     loading: false,
     product: null,
+    products: [],
     error: null
   };
   
@@ -21,16 +25,37 @@ import {
         };
       case SAVE_PRODUCT_SUCCESS:
         return {
+          ...state,
           loading: false,
           product: action.payload,
           error: null
         };
       case SAVE_PRODUCT_FAILURE:
         return {
+          ...state,
           loading: false,
           product: null,
           error: action.payload
         };
+        case FETCH_PRODUCTS_REQUEST:
+          return {
+            ...state,
+            loading: true
+          }
+        case FETCH_PRODUCTS_SUCCESS:
+          return {
+            ...state,
+            loading: false,
+            products: action.payload,
+            error: ''
+          }
+        case FETCH_PRODUCTS_FAILURE:
+          return {
+            ...state,
+            loading: false,
+            products: [],
+            error: action.payload
+          }
       default: return state;
     }
   };

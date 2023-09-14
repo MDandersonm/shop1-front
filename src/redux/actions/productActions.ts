@@ -13,6 +13,9 @@ import {
   SAVE_PRODUCT_FAILURE,
   ProductActionTypes,
   IProduct,
+  FETCH_PRODUCTS_REQUEST,
+  FETCH_PRODUCTS_SUCCESS,
+  FETCH_PRODUCTS_FAILURE,
 } from "../types/productTypes";
 import axios, { AxiosError } from "axios";
 
@@ -87,3 +90,37 @@ export const saveProduct = (product: IProduct, imageFile: File | null, navigate:
 //     payload: error,
 //   };
 // };
+
+// Thunk action
+export const fetchProducts = () => {
+  return (dispatch: any) => {
+    dispatch(fetchProductsRequest());
+    mainRequest.get('/products/list')
+      .then(response => {
+        dispatch(fetchProductsSuccess(response.data));
+      })
+      .catch(error => {
+        dispatch(fetchProductsFailure(error.message));
+      });
+  }
+}
+export const fetchProductsRequest = () => {
+  return {
+    type: FETCH_PRODUCTS_REQUEST
+  }
+}
+
+export const fetchProductsSuccess = (products: IProduct[]) => {
+  return {
+    type: FETCH_PRODUCTS_SUCCESS,
+    payload: products
+  }
+}
+
+export const fetchProductsFailure = (error: string) => {
+  return {
+    type: FETCH_PRODUCTS_FAILURE,
+    payload: error
+  }
+}
+

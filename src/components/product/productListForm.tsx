@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, Dispatch } from "react";
+import axios from 'axios';
 import {
   Card,
   CardActionArea,
@@ -10,92 +11,35 @@ import {
   ButtonGroup,
 } from "@mui/material";
 import { IProduct } from '../../redux/types/productTypes';
+import mainRequest from "@/api/mainRequest";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { fetchProducts } from "../../redux/actions/productActions";
 
 const ProductListForm: React.FC = () => {
-  const products: IProduct[] = [
-    {
-      id: 1,
-      name: "울트라 얼티메이트 MG",
-      brand: "푸마",
-      price: "289000",
-      image: "/images/product/puma-ultra-ultimate.png",
-    },
-    {
-      id: 2,
-      name: "울트라 얼티메이트 MG",
-      brand: "푸마",
-      price: "289000",
-      image: "/images/product/puma-ultra-ultimate.png",
-    },
-    {
-      id: 3,
-      name: "울트라 얼티메이트 MG",
-      brand: "푸마",
-      price: "289000",
-      image: "/images/product/puma-ultra-ultimate.png",
-    },
-    {
-      id: 4,
-      name: "울트라 얼티메이트 MG",
-      brand: "푸마",
-      price: "289000",
-      image: "/images/product/puma-ultra-ultimate.png",
-    },
-    {
-      id: 5,
-      name: "울트라 얼티메이트 MG",
-      brand: "푸마",
-      price: "289000",
-      image: "/images/product/puma-ultra-ultimate.png",
-    },
-    {
-      id: 6,
-      name: "울트라 얼티메이트 MG",
-      brand: "푸마",
-      price: "289000",
-      image: "/images/product/puma-ultra-ultimate.png",
-    },
-    {
-      id: 7,
-      name: "울트라 얼티메이트 MG",
-      brand: "푸마",
-      price: "289000",
-      image: "/images/product/puma-ultra-ultimate.png",
-    },
-    {
-      id: 8,
-      name: "울트라 얼티메이트 MG",
-      brand: "푸마",
-      price: "289000",
-      image: "/images/product/puma-ultra-ultimate.png",
-    },
-    {
-      id: 9,
-      name: "울트라 얼티메이트 MG",
-      brand: "푸마",
-      price: "289000",
-      image: "/images/product/puma-ultra-ultimate.png",
-    },
-    {
-      id: 10,
-      name: "울트라 얼티메이트 MG",
-      brand: "푸마",
-      price: "289000",
-      image: "/images/product/puma-ultra-ultimate.png",
-    },
-    {
-      id: 11,
-      name: "울트라 얼티메이트 MG",
-      brand: "푸마",
-      price: "289000",
-      image: "/images/product/puma-ultra-ultimate.png",
-    },
-
-    // 이하 동일하게 추가
-  ];
+  // const [products, setProducts] = useState<IProduct[]>([]);
+  const products = useSelector((state: any) => state.product.products);
+  const dispatch: Dispatch<any> = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
+
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
+
+  // useEffect(() => {
+  //   mainRequest.post("/products/list")
+  //     .then(response => {
+  //       setProducts(response.data);
+  //     })
+  //     .catch(error => {
+  //       console.error("Error fetching products:", error);
+  //     });
+  // }, []);
   const numberOfPages = Math.ceil(products.length / itemsPerPage);
+
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLElement>,
@@ -117,14 +61,14 @@ const ProductListForm: React.FC = () => {
       >
         {products
           .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-          .map((product) => (
+          .map((product: IProduct) => (
             <Card sx={{ maxWidth: "250px", margin: 2 }} key={product.id}>
               <CardActionArea>
                 <CardMedia
                   component="img"
-                  image={product.image}
+                  image={`/images/product/${product.image}`}
                   alt={product.name}
-                  // style={{ objectFit: 'contain' }}
+                // style={{ objectFit: 'contain' }}
                 />
                 <CardContent>
                   <Typography
