@@ -36,7 +36,18 @@ const Navbar: React.FC = () => {
             </li>
           </ul>
           <ul className="navbar-nav  d-flex flex-row">
-            <li className="nav-item">
+          <li className="nav-item mx-5">
+              <ActiveNavLink
+                to="/product-register"
+                activeClassName="active-link"
+                className="nav-link"
+              >
+                <span className="h5" style={{ fontWeight: "bold" }}>
+                  상품등록
+                </span>
+              </ActiveNavLink>
+            </li>
+            <li className="nav-item mx-5">
               <ActiveNavLink
                 to="/product-list"
                 activeClassName="active-link"

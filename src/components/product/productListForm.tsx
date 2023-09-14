@@ -9,13 +9,7 @@ import {
   Button,
   ButtonGroup,
 } from "@mui/material";
-interface IProduct {
-  id: number;
-  name: string;
-  brand: string;
-  price: string;
-  image: string;
-}
+import { IProduct } from '../../redux/types/productTypes';
 
 const ProductListForm: React.FC = () => {
   const products: IProduct[] = [
