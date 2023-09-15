@@ -2,13 +2,17 @@ import {
   ADD_TO_CART,
   CartState,
   DECREMENT_QUANTITY,
+  GO_TO_CHECKOUT,
   INCREMENT_QUANTITY,
   REMOVE_FROM_CART,
+  RESET_CHECKOUT_FLOW,
   ShoppingCartActions,
 } from "../types/shoppingTypes";
 
 const initialState: CartState = {
   cart: [],
+  singleItem: null,
+  checkoutFlow: "cart",
 };
 
 export const shoppingReducer = (
@@ -16,6 +20,19 @@ export const shoppingReducer = (
   action: ShoppingCartActions
 ): CartState => {
   switch (action.type) {
+    case RESET_CHECKOUT_FLOW:
+      return {
+        ...state,
+        checkoutFlow: "cart",
+      };
+
+    case GO_TO_CHECKOUT:
+      return {
+        ...state,
+        singleItem: action.payload,
+        checkoutFlow: action.payload.flow,
+      };
+
     case ADD_TO_CART:
       const existingProductIndex = state.cart.findIndex(
         (item) =>
@@ -37,6 +54,7 @@ export const shoppingReducer = (
             updatedItem,
             ...state.cart.slice(existingProductIndex + 1),
           ],
+          checkoutFlow: action.payload.flow,
         };
       }
       // 새로운 상품 추가

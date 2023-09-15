@@ -1,5 +1,5 @@
 // CartPage.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -21,11 +21,27 @@ import { CartFormProps } from "../../redux/types/shoppingTypes";
 const CartForm: React.FC<CartFormProps> = ({ isCheckout = false }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const checkoutFlow = useSelector(
+    (state: RootState) => state.shopping.checkoutFlow
+  );
+  const cartItemsFromState = useSelector(
+    (state: RootState) => state.shopping.cart
+  );
+  const singleItem = useSelector(
+    (state: RootState) => state.shopping.singleItem
+  );
 
-  const cartItems = useSelector((state: RootState) => state.shopping.cart);
-  const totalPrice = cartItems.reduce((acc, item) => {
-    console.log("Price:", item.product.price);
-    console.log("Quantity:", item.quantity);
+  const [items, setItems] = useState(cartItemsFromState); // 로컬 상태로 항목들을 관리
+
+  useEffect(() => {
+    if (checkoutFlow === "direct") {
+      setItems([singleItem]); // 바로구매를 통한 접근이면 singleItem만을 배열에 담습니다.
+    } else if (checkoutFlow === "cart") {
+      setItems(cartItemsFromState); // 장바구니를 거쳐온 경우에는 cartItems를 그대로 사용합니다.
+    }
+  }, [checkoutFlow, cartItemsFromState, singleItem]);
+
+  const totalPrice = items.reduce((acc, item) => {
     const price =
       typeof item.product.price === "number" ? item.product.price : 0;
     const quantity = typeof item.quantity === "number" ? item.quantity : 0;
@@ -34,9 +50,9 @@ const CartForm: React.FC<CartFormProps> = ({ isCheckout = false }) => {
   }, 0);
 
   const handleQuantityChange = (index: number, newQuantity: number) => {
-    const product = cartItems[index].product;
-    const currentQuantity = cartItems[index].quantity;
-    const size = cartItems[index].size; // size 정보를 가져옵니다.
+    const product = items[index].product;
+    const currentQuantity = items[index].quantity;
+    const size = items[index].size;
 
     if (newQuantity > currentQuantity) {
       dispatch(incrementQuantity(product.id, size));
@@ -44,13 +60,13 @@ const CartForm: React.FC<CartFormProps> = ({ isCheckout = false }) => {
       dispatch(decrementQuantity(product.id, size));
     }
   };
+
   const handlePaymentClick = () => {
     navigate("/checkout");
   };
-
   return (
     <div>
-      {cartItems.map((item, index) => (
+      {items.map((item, index) => (
         <Card
           key={item.product.id + item.size}
           style={{ display: "flex", marginBottom: "20px" }}
@@ -132,7 +148,11 @@ const CartForm: React.FC<CartFormProps> = ({ isCheckout = false }) => {
       <Button
         variant="contained"
         color="primary"
-        style={{ display: isCheckout ? "none" : "block", margin: "20px auto", width: "100px" }}
+        style={{
+          display: isCheckout ? "none" : "block",
+          margin: "20px auto",
+          width: "100px",
+        }}
         onClick={handlePaymentClick}
       >
         결제

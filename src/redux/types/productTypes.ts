@@ -8,7 +8,7 @@ export interface IProduct {
   brand: string;
   price: string;
   image?: string;
-  detailImages?: IProductDetailImage[];  // 추가된 부분
+  detailImages?: IProductDetailImage[]; 
 }
 
  // Action Types

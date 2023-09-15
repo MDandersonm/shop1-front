@@ -1,7 +1,7 @@
-import { addToCart } from "../../redux/actions/shoppingActions";
+import { addToCart, goToCheckOut } from "../../redux/actions/shoppingActions";
 import { fetchProduct } from "../../redux/actions/productActions";
 import { RootState } from "@/redux/reducers";
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import {
   Box,
   CircularProgress,
@@ -19,9 +19,8 @@ import React, { Dispatch, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { useParams } from "react-router-dom";
-
-import { toast } from 'react-toastify';
-
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 type RouteParams = {
   [key: string]: string | undefined;
@@ -29,6 +28,7 @@ type RouteParams = {
 
 const ProductDetailForm: React.FC = () => {
   const dispatch: Dispatch<any> = useDispatch();
+  const navigate = useNavigate();
 
   const { product, loading, error } = useSelector(
     (state: RootState) => state.product
@@ -43,9 +43,24 @@ const ProductDetailForm: React.FC = () => {
     setSelectedSize(event.target.value as string);
   };
   const handleAddToCart = () => {
-    dispatch(addToCart(product, selectedSize));
-    toast.success("장바구니에 추가되었습니다!");
-}
+    //장바구니 추가
+    if (product) {
+      dispatch(addToCart("cart", product, selectedSize));
+      toast.success("장바구니에 추가되었습니다!");
+    } else {
+      alert("product가 null입니다");
+    }
+  };
+
+  const handleGoToCheckOut = () => {
+    //바로구매
+    if (product) {
+      dispatch(goToCheckOut("direct", product, selectedSize));
+      navigate("/checkout");
+    } else {
+      alert("product가 null입니다");
+    }
+  };
 
   useEffect(() => {
     dispatch(fetchProduct(productId));
@@ -130,6 +145,7 @@ const ProductDetailForm: React.FC = () => {
                 variant="contained"
                 color="secondary"
                 style={{ marginRight: "10px" }}
+                onClick={handleGoToCheckOut}
               >
                 바로구매
               </Button>

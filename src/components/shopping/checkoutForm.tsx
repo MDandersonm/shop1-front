@@ -15,8 +15,6 @@ const CheckoutForm: React.FC = () => {
   const [address, setAddress] = useState("");
   const [postCode, setPostCode] = useState("");
 
-  const postcodeRef = useRef(null);
-
   const handleAddressSearch = () => {
     new window.daum.Postcode({
       oncomplete: function (data: any) {

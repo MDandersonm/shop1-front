@@ -7,15 +7,26 @@ import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 
 import axios, { AxiosError } from "axios";
-import { ADD_TO_CART, DECREMENT_QUANTITY, INCREMENT_QUANTITY, REMOVE_FROM_CART } from "../types/shoppingTypes";
+import { GO_TO_CHECKOUT,ADD_TO_CART, DECREMENT_QUANTITY, INCREMENT_QUANTITY, REMOVE_FROM_CART, RESET_CHECKOUT_FLOW } from "../types/shoppingTypes";
 import { Dispatch } from "redux";
+import { IProduct } from "../types/productTypes";
 
+export const resetCheckoutFlow = () => {
+  return {
+    type: RESET_CHECKOUT_FLOW
+  };
+};
+export const goToCheckOut = (flow:string,product: IProduct, size: string) => {
+  return {
+    type: GO_TO_CHECKOUT,
+    payload: {flow, product, size, quantity: 1 }
+  };
+};
 
-
-export const addToCart = (product: any, size: string) => {
+export const addToCart = (flow:string,product: IProduct, size: string) => {
   return {
     type: ADD_TO_CART,
-    payload: { product, size, quantity: 1 }
+    payload: {flow, product, size, quantity: 1 }
   };
 };
 

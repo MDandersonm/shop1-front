@@ -1,5 +1,5 @@
 import React from "react";
-import { useMatch, Link, NavLink } from "react-router-dom";
+import { useMatch, Link, NavLink, useNavigate } from "react-router-dom";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -11,12 +11,16 @@ import { AppDispatch } from "../index";
 const Navbar: React.FC = () => {
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const dispatch: AppDispatch = useDispatch();
-
+  const navigate = useNavigate();
   const handleLogout = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault(); // 버튼의 기본 동작인 폼 제출을 막습니다.
     dispatch(logout()); // 로그아웃 액션을 디스패치합니다.
+  };
+  const handleNavigateToCart = () => {
+    dispatch({ type: "RESET_CHECKOUT_FLOW" });
+    navigate("/cart");
   };
   return (
     <nav
@@ -79,6 +83,7 @@ const Navbar: React.FC = () => {
               </NavLink> */}
               {isLoggedIn ? (
                 <ActiveNavLink
+                  onClick={handleNavigateToCart}
                   className="nav-link"
                   activeClassName="active-link"
                   to="/cart"
