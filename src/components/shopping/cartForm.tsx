@@ -15,9 +15,13 @@ import {
   incrementQuantity,
   decrementQuantity,
 } from "../../redux/actions/shoppingActions";
+import { useNavigate } from "react-router-dom";
+import { CartFormProps } from "../../redux/types/shoppingTypes";
 
-const CartForm: React.FC = () => {
+const CartForm: React.FC<CartFormProps> = ({ isCheckout = false }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const cartItems = useSelector((state: RootState) => state.shopping.cart);
   const totalPrice = cartItems.reduce((acc, item) => {
     console.log("Price:", item.product.price);
@@ -39,6 +43,9 @@ const CartForm: React.FC = () => {
     } else if (newQuantity < currentQuantity && newQuantity >= 1) {
       dispatch(decrementQuantity(product.id, size));
     }
+  };
+  const handlePaymentClick = () => {
+    navigate("/checkout");
   };
 
   return (
@@ -62,7 +69,9 @@ const CartForm: React.FC = () => {
             <Typography variant="h5">{item.product.name}</Typography>
             <Typography>brand: {item.product.brand}</Typography>
             <Typography>Size: {item.size}</Typography>
-            <Typography>Price: {Number(item.product.price).toLocaleString()}원</Typography>
+            <Typography>
+              Price: {Number(item.product.price).toLocaleString()}원
+            </Typography>
           </CardContent>
           <div
             style={{
@@ -75,21 +84,26 @@ const CartForm: React.FC = () => {
             <TextField
               value={item.quantity}
               type="number"
-              inputProps={{ min: 1 }}
+              inputProps={{ min: 1, readOnly: isCheckout }} // isCheckout이 true이면 readOnly 속성 적용
               style={{ width: "50px", margin: "0 20px" }}
-              onChange={(e) => handleQuantityChange(index, +e.target.value)} // + 기호를 붙이면, JavaScript는 해당 문자열을 숫자로 변환
+              onChange={
+                isCheckout
+                  ? undefined
+                  : (e) => handleQuantityChange(index, +e.target.value)
+              } // + 기호를 붙이면, JavaScript는 해당 문자열을 숫자로 변환
             />
 
             <Typography style={{ margin: "0 20px" }}>
-              Total:  {Number(item.product.price * item.quantity).toLocaleString()}원 
+              Total:{" "}
+              {Number(item.product.price * item.quantity).toLocaleString()}원
             </Typography>
           </div>
           <div
             style={{
-              display: "flex",
               //   flexDirection: "row",
               alignItems: "center",
               marginRight: "10px",
+              display: isCheckout ? "none" : "flex",
             }}
           >
             <Button
@@ -113,12 +127,13 @@ const CartForm: React.FC = () => {
         variant="h6"
         style={{ textAlign: "right", marginRight: "20px" }}
       >
-        Total Price:  {Number(totalPrice).toLocaleString()}원
+        Total Price: {Number(totalPrice).toLocaleString()}원
       </Typography>
       <Button
         variant="contained"
         color="primary"
-        style={{ display: "block", margin: "20px auto", width: "100px" }}
+        style={{ display: isCheckout ? "none" : "block", margin: "20px auto", width: "100px" }}
+        onClick={handlePaymentClick}
       >
         결제
       </Button>

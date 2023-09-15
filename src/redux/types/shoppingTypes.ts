@@ -1,3 +1,9 @@
+declare global {
+  interface Window {
+    daum: any;
+  }
+}
+
 export type CartState = {
   cart: any[];
 };
@@ -5,7 +11,9 @@ export const ADD_TO_CART = "ADD_TO_CART";
 export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
 export const INCREMENT_QUANTITY = "INCREMENT_QUANTITY";
 export const DECREMENT_QUANTITY = "DECREMENT_QUANTITY";
-
+export interface CartFormProps {
+  isCheckout?: boolean; // 선택적 prop. 기본값은 false 입니다.
+}
 export interface AddToCartAction {
   type: typeof ADD_TO_CART;
   payload: { product: any; size: string };

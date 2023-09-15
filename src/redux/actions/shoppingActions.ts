@@ -11,6 +11,7 @@ import { ADD_TO_CART, DECREMENT_QUANTITY, INCREMENT_QUANTITY, REMOVE_FROM_CART }
 import { Dispatch } from "redux";
 
 
+
 export const addToCart = (product: any, size: string) => {
   return {
     type: ADD_TO_CART,
