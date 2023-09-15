@@ -14,12 +14,14 @@ import { IProduct } from '../../redux/types/productTypes';
 import mainRequest from "@/api/mainRequest";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { fetchProducts } from "../../redux/actions/productActions";
+import { fetchProduct, fetchProducts } from "../../redux/actions/productActions";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const ProductListForm: React.FC = () => {
   // const [products, setProducts] = useState<IProduct[]>([]);
   const products = useSelector((state: any) => state.product.products);
   const dispatch: Dispatch<any> = useDispatch();
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
@@ -47,6 +49,10 @@ const ProductListForm: React.FC = () => {
   ) => {
     setCurrentPage(newPage);
   };
+  const handleCardClick = (productId: number) => {
+    // dispatch(fetchProduct(productId));
+    navigate(`/product-detail/${productId}`);
+  };
 
   return (
     <Box>
@@ -63,7 +69,7 @@ const ProductListForm: React.FC = () => {
           .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
           .map((product: IProduct) => (
             <Card sx={{ maxWidth: "250px", margin: 2 }} key={product.id}>
-              <CardActionArea>
+              <CardActionArea  onClick={() => handleCardClick(product.id)}>
                 <CardMedia
                   component="img"
                   image={`/images/product/${product.image}`}

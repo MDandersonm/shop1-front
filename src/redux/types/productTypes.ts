@@ -16,6 +16,10 @@ export const FETCH_PRODUCTS_REQUEST = 'FETCH_PRODUCTS_REQUEST';
 export const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS';
 export const FETCH_PRODUCTS_FAILURE = 'FETCH_PRODUCTS_FAILURE';
 
+export const FETCH_PRODUCT_REQUEST = 'FETCH_PRODUCT_REQUEST';
+export const FETCH_PRODUCT_SUCCESS = 'FETCH_PRODUCT_SUCCESS';
+export const FETCH_PRODUCT_FAILURE = 'FETCH_PRODUCT_FAILURE';
+
 export interface ProductState {
     loading: boolean;
     product: IProduct | null;
@@ -49,10 +53,29 @@ type FetchProductsFailureAction = {
     type: typeof FETCH_PRODUCTS_FAILURE;
     payload: string;
 }
+
+
+interface FetchProductRequestAction {
+  type: typeof FETCH_PRODUCT_REQUEST;
+}
+
+interface FetchProductSuccessAction {
+  type: typeof FETCH_PRODUCT_SUCCESS;
+  payload: IProduct;
+}
+
+interface FetchProductFailureAction {
+  type: typeof FETCH_PRODUCT_FAILURE;
+  error: string;
+}
+
 export type ProductActionTypes = 
     | SaveProductRequestAction
     | SaveProductSuccessAction
     | SaveProductFailureAction
     | FetchProductsRequestAction
     | FetchProductsSuccessAction
-    | FetchProductsFailureAction;
+    | FetchProductsFailureAction
+    | FetchProductRequestAction
+    | FetchProductSuccessAction
+    | FetchProductFailureAction;
