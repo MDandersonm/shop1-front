@@ -2,11 +2,12 @@ import React from "react";
 import { useMatch, Link, NavLink } from "react-router-dom";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ActiveNavLink from "./ActiveNavLink";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/reducers";
 import { logout } from "../redux/actions/userActions";
-import { AppDispatch } from '../index';
+import { AppDispatch } from "../index";
 const Navbar: React.FC = () => {
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const dispatch: AppDispatch = useDispatch();
@@ -36,7 +37,7 @@ const Navbar: React.FC = () => {
             </li>
           </ul>
           <ul className="navbar-nav  d-flex flex-row">
-          <li className="nav-item mx-5">
+            <li className="nav-item mx-5">
               <ActiveNavLink
                 to="/product-register"
                 activeClassName="active-link"
@@ -76,16 +77,29 @@ const Navbar: React.FC = () => {
                 <PersonAddIcon className="mx-2" />
                 <span className="">회원가입</span>
               </NavLink> */}
-              <ActiveNavLink
-                className="nav-link"
-                activeClassName="active-link"
-                to="/sign-up"
-              >
-                <div className="d-flex align-items-center">
-                  <PersonAddIcon className="mx-2" />
-                  <span className="">회원가입</span>
-                </div>
-              </ActiveNavLink>
+              {isLoggedIn ? (
+                <ActiveNavLink
+                  className="nav-link"
+                  activeClassName="active-link"
+                  to="/cart"
+                >
+                  <div className="d-flex align-items-center">
+                    <ShoppingCartIcon className="mx-2" />
+                    <span className="">장바구니</span>
+                  </div>
+                </ActiveNavLink>
+              ) : (
+                <ActiveNavLink
+                  className="nav-link"
+                  activeClassName="active-link"
+                  to="/sign-up"
+                >
+                  <div className="d-flex align-items-center">
+                    <PersonAddIcon className="mx-2" />
+                    <span className="">회원가입</span>
+                  </div>
+                </ActiveNavLink>
+              )}
             </li>
             <li className="nav-item mx-5">
               {isLoggedIn ? (

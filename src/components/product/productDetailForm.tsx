@@ -1,5 +1,7 @@
+import { addToCart } from "../../redux/actions/shoppingActions";
 import { fetchProduct } from "../../redux/actions/productActions";
 import { RootState } from "@/redux/reducers";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import {
   Box,
   CircularProgress,
@@ -8,11 +10,18 @@ import {
   Grid,
   Paper,
   Typography,
+  Button,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
 } from "@mui/material";
 import React, { Dispatch, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { useParams } from "react-router-dom";
+
+import { toast } from 'react-toastify';
+
 
 type RouteParams = {
   [key: string]: string | undefined;
@@ -27,8 +36,18 @@ const ProductDetailForm: React.FC = () => {
   const { id } = useParams<RouteParams>();
   const productId = Number(id);
 
-  useEffect(() => {
+  const sizes = ["240", "250", "260", "270", "280"];
+  const [selectedSize, setSelectedSize] = React.useState(sizes[0]);
 
+  const handleSizeChange = (event: SelectChangeEvent<string>) => {
+    setSelectedSize(event.target.value as string);
+  };
+  const handleAddToCart = () => {
+    dispatch(addToCart(product, selectedSize));
+    toast.success("장바구니에 추가되었습니다!");
+}
+
+  useEffect(() => {
     dispatch(fetchProduct(productId));
   }, [dispatch, productId]);
 
@@ -69,11 +88,53 @@ const ProductDetailForm: React.FC = () => {
               {product.name}
             </Typography>
             <Typography variant="subtitle2" style={{ marginBottom: "24px" }}>
-              브랜드: {product.brand}
+              브랜드:{product.brand}
             </Typography>
             <Typography variant="subtitle2" style={{ marginBottom: "24px" }}>
               가격: {product.price.toLocaleString()}원
             </Typography>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "24px",
+              }}
+            >
+              <Typography variant="subtitle2" style={{ marginRight: "10px" }}>
+                사이즈:
+              </Typography>
+              <Select
+                value={selectedSize}
+                onChange={handleSizeChange}
+                variant="outlined"
+                style={{ height: "30px", padding: "0 5px" }}
+              >
+                {sizes.map((size) => (
+                  <MenuItem key={size} value={size}>
+                    {size}
+                  </MenuItem>
+                ))}
+              </Select>
+            </div>
+            <div style={{ marginBottom: "24px" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ marginRight: "10px" }}
+                onClick={handleAddToCart}
+              >
+                <ShoppingCartIcon style={{ marginRight: "5px" }} />
+                장바구니
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                style={{ marginRight: "10px" }}
+              >
+                바로구매
+              </Button>
+              <Button variant="outlined">관심상품</Button>
+            </div>
           </Box>
         </Grid>
       </Grid>
