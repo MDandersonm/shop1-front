@@ -27,10 +27,13 @@ export const shoppingReducer = (
         ...state,
         cart: state.cart.filter(
           (item) =>
-            item.product.id !== action.payload.productId &&
-            item.size !== action.payload.size
+            !(
+              item.product.id === action.payload.productId &&
+              item.size === action.payload.size
+            )
         ),
       };
+
     case INCREMENT_QUANTITY:
       return {
         ...state,
