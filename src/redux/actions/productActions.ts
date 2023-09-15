@@ -29,6 +29,7 @@ export const saveProduct =
   (
     product: IProduct,
     imageFile: File | null,
+    detailImageFiles: File[],
     navigate: (path: string) => void
   ) =>
   async (dispatch: ThunkDispatch<RootState, unknown, AnyAction>) => {
@@ -36,6 +37,12 @@ export const saveProduct =
       const formData = new FormData();
       if (imageFile) {
         formData.append("image", imageFile);
+      }
+      if (detailImageFiles.length !==0) {
+        console.log("detailImageFiles",detailImageFiles)
+        detailImageFiles.forEach((file, index) => {
+          formData.append("detailImages", file);
+        });
       }
       formData.append(
         "product",
@@ -140,6 +147,8 @@ export const fetchProduct =
 
     try {
       const response = await mainRequest.get(`/products/detail/${productId}`);
+      console.log("response.data",response.data)
+      console.log("response.data.detailImages",response.data.detailImages[0])
       dispatch({ type: FETCH_PRODUCT_SUCCESS, payload: response.data });
     } catch (error) {
       const err = error as Error;

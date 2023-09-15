@@ -28,6 +28,7 @@ const ProductDetailForm: React.FC = () => {
   const productId = Number(id);
 
   useEffect(() => {
+
     dispatch(fetchProduct(productId));
   }, [dispatch, productId]);
 
@@ -78,6 +79,26 @@ const ProductDetailForm: React.FC = () => {
       </Grid>
 
       <Divider style={{ marginTop: "20px", marginBottom: "20px" }} />
+
+      {product.detailImages &&
+        product.detailImages.map((detailImage, index) => (
+          <img
+            key={index}
+            src={
+              detailImage.detailImageUrl
+                ? `/images/product/${detailImage.detailImageUrl}`
+                : "/path/to/default/detail/image.jpg"
+            }
+            alt={`상세 이미지 ${index + 1} ${detailImage.detailImageUrl}`}
+            style={{
+              width: "100%",
+              objectFit: "cover",
+              borderRadius: "10px",
+              border: "0.5px solid lightgrey",
+              marginBottom: "20px", // 각 이미지 간 간격을 주기 위함
+            }}
+          />
+        ))}
     </Container>
   );
 };

@@ -1,11 +1,15 @@
+export interface IProductDetailImage {
+  detailImageUrl: string;
+}
+
 export interface IProduct {
-    id: number;
-    name: string;
-    brand: string;
-    price: string;
-    image?:string;
-  }
-  
+  id: number;
+  name: string;
+  brand: string;
+  price: string;
+  image?: string;
+  detailImages?: IProductDetailImage[];  // 추가된 부분
+}
 
  // Action Types
 export const SAVE_PRODUCT_REQUEST = 'SAVE_PRODUCT_REQUEST';
