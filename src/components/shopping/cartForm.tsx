@@ -11,7 +11,6 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/reducers";
 import {
-  addToCart,
   removeFromCart,
   incrementQuantity,
   decrementQuantity,

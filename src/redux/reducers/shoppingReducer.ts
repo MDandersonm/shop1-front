@@ -17,10 +17,35 @@ export const shoppingReducer = (
 ): CartState => {
   switch (action.type) {
     case ADD_TO_CART:
-      return {
-        ...state,
-        cart: [...state.cart, action.payload],
-      };
+      const existingProductIndex = state.cart.findIndex(
+        (item) =>
+          item.product.id === action.payload.product.id &&
+          item.size === action.payload.size
+      );
+
+      // 동일한 상품이 이미 있는 경우
+      if (existingProductIndex !== -1) {
+        const updatedItem = {
+          ...state.cart[existingProductIndex],
+          quantity: state.cart[existingProductIndex].quantity + 1,
+        };
+
+        return {
+          ...state,
+          cart: [
+            ...state.cart.slice(0, existingProductIndex),
+            updatedItem,
+            ...state.cart.slice(existingProductIndex + 1),
+          ],
+        };
+      }
+      // 새로운 상품 추가
+      else {
+        return {
+          ...state,
+          cart: [...state.cart, action.payload],
+        };
+      }
 
     case REMOVE_FROM_CART:
       return {
