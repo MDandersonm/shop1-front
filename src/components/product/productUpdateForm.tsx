@@ -1,17 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, TextField, Box, CardMedia, Typography } from "@mui/material";
 import { IProduct } from "../../redux/types/productTypes";
-import { useDispatch } from "react-redux";
-import { saveProduct } from "../../redux/actions/productActions";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchProduct,
+  updateProduct,
+} from "../../redux/actions/productActions";
 
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { RootState } from "@/redux/reducers";
 
-import { useNavigate } from "react-router-dom";
-const ProductRegisterForm: React.FC = () => {
+import { useNavigate, useParams } from "react-router-dom";
+
+type RouteParams = {
+  [key: string]: string | undefined;
+};
+const ProductUpdateForm: React.FC = () => {
   const navigate = useNavigate();
   const dispatch: ThunkDispatch<RootState, unknown, AnyAction> = useDispatch();
+  const { id } = useParams<RouteParams>();
+  const productId = Number(id);
+
+  useEffect(() => {
+    dispatch(fetchProduct(productId));
+  }, [dispatch, productId]);
+
+  const fetchedProduct = useSelector(
+    (state: RootState) => state.product.product
+  );
+
+  useEffect(() => {
+    if (fetchedProduct) {
+      setProduct({
+        ...fetchedProduct,
+        price: fetchedProduct.price.toString(), // Double을 문자열로 변환
+      });
+      if (fetchedProduct.image) {
+        setPreviewImage(`/images/product/${fetchedProduct.image}`);
+      } else {
+        setPreviewImage(null);
+      }
+
+      // detailImages가 ProductDetailImage[] 타입이라면, 해당 리스트를 문자열 배열로 변환
+      const detailImageURLs =
+        fetchedProduct.detailImages?.map(
+          (detailImage) => `/images/product/${detailImage.detailImageUrl}`
+        ) || [];
+      setDetailPreviews(detailImageURLs);
+    }
+  }, [fetchedProduct]);
 
   const [product, setProduct] = useState<IProduct>({
     id: 0,
@@ -37,7 +75,6 @@ const ProductRegisterForm: React.FC = () => {
       [name]: value, //동적으로 객체의 속성 이름을 생성하고 업데이트
     }));
   };
-
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files![0];
     if (file) {
@@ -60,8 +97,8 @@ const ProductRegisterForm: React.FC = () => {
     }
   };
 
-  const handleSubmit = () => {
-    dispatch(saveProduct(product, imageFile, detailImageFiles, navigate));
+  const handleUpdate = () => {
+    dispatch(updateProduct(product, imageFile, detailImageFiles, navigate));
   };
 
   return (
@@ -158,12 +195,12 @@ const ProductRegisterForm: React.FC = () => {
           </Box>
         </Box>
 
-        <Button variant="contained" color="primary" onClick={handleSubmit}>
-          상품 등록
+        <Button variant="contained" color="primary" onClick={handleUpdate}>
+          상품 수정
         </Button>
       </Box>
     </>
   );
 };
 
-export default ProductRegisterForm;
+export default ProductUpdateForm;

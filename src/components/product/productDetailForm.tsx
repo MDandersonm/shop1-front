@@ -2,13 +2,14 @@ import { addToCart, goToCheckOut } from "../../redux/actions/shoppingActions";
 import { fetchProduct } from "../../redux/actions/productActions";
 import { RootState } from "@/redux/reducers";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Box,
   CircularProgress,
   Container,
   Divider,
   Grid,
-  Paper,
   Typography,
   Button,
   Select,
@@ -65,6 +66,10 @@ const ProductDetailForm: React.FC = () => {
   useEffect(() => {
     dispatch(fetchProduct(productId));
   }, [dispatch, productId]);
+
+  const handleUpdateClick = (productId: number) => {
+    navigate(`/product-update/${productId}`);
+  };
 
   if (loading) return <CircularProgress />;
   if (error) return <div>Error: {error}</div>;
@@ -150,6 +155,29 @@ const ProductDetailForm: React.FC = () => {
                 바로구매
               </Button>
               <Button variant="outlined">관심상품</Button>
+            </div>
+            <div style={{ marginTop: "35px", marginBottom: "24px" }}>
+              <Button
+                variant="outlined"
+                color="primary"
+                style={{ marginRight: "10px" }}
+                onClick={() => {
+                  handleUpdateClick(product.id);
+                }}
+              >
+                <EditIcon style={{ marginRight: "5px" }} />
+                수정
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => {
+                  // 삭제 로직
+                }}
+              >
+                <DeleteIcon style={{ marginRight: "5px" }} />
+                삭제
+              </Button>
             </div>
           </Box>
         </Grid>
