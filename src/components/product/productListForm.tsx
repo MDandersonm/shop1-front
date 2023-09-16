@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Dispatch } from "react";
-import axios from 'axios';
+import axios from "axios";
 import {
   Card,
   CardActionArea,
@@ -10,12 +10,16 @@ import {
   Button,
   ButtonGroup,
 } from "@mui/material";
-import { IProduct } from '../../redux/types/productTypes';
+import { IProduct } from "../../redux/types/productTypes";
 import mainRequest from "@/api/mainRequest";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { fetchProduct, fetchProducts } from "../../redux/actions/productActions";
+import {
+  fetchProduct,
+  fetchProducts,
+} from "../../redux/actions/productActions";
 import { Navigate, useNavigate } from "react-router-dom";
+import ProductCard from "./productCardForm";
 
 const ProductListForm: React.FC = () => {
   // const [products, setProducts] = useState<IProduct[]>([]);
@@ -25,11 +29,9 @@ const ProductListForm: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
-
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
-
 
   // useEffect(() => {
   //   mainRequest.post("/products/list")
@@ -42,16 +44,11 @@ const ProductListForm: React.FC = () => {
   // }, []);
   const numberOfPages = Math.ceil(products.length / itemsPerPage);
 
-
   const handleChangePage = (
     event: React.MouseEvent<HTMLElement>,
     newPage: number
   ) => {
     setCurrentPage(newPage);
-  };
-  const handleCardClick = (productId: number) => {
-    // dispatch(fetchProduct(productId));
-    navigate(`/product-detail/${productId}`);
   };
 
   return (
@@ -68,38 +65,7 @@ const ProductListForm: React.FC = () => {
         {products
           .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
           .map((product: IProduct) => (
-            <Card sx={{ width: "250px" , margin: 2 }} key={product.id}>
-              <CardActionArea  onClick={() => handleCardClick(product.id)}>
-                <CardMedia
-                  component="img"
-                  image={`/images/product/${product.image}`}
-                  alt={product.name}
-                // style={{ objectFit: 'contain' }}
-                />
-                <CardContent>
-                  <Typography
-                    gutterBottom
-                    variant="h5"
-                    component="div"
-                    sx={{ fontSize: 20 }}
-                  >
-                    {product.name}
-                  </Typography>
-                  <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    width="100%"
-                  >
-                    <Typography variant="body1" component="span">
-                      {product.brand}
-                    </Typography>
-                    <Typography variant="body2" component="span">
-                      {Number(product.price).toLocaleString()}원
-                    </Typography>
-                  </Box>
-                </CardContent>
-              </CardActionArea>
-            </Card>
+            <ProductCard product={product} key={product.id} />
           ))}
       </Box>
       <Box display="flex" justifyContent="center">
