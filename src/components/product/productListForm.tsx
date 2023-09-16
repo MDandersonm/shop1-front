@@ -68,7 +68,7 @@ const ProductListForm: React.FC = () => {
         {products
           .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
           .map((product: IProduct) => (
-            <Card sx={{ maxWidth: "250px", margin: 2 }} key={product.id}>
+            <Card sx={{ width: "250px" , margin: 2 }} key={product.id}>
               <CardActionArea  onClick={() => handleCardClick(product.id)}>
                 <CardMedia
                   component="img"
