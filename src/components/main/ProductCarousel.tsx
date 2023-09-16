@@ -16,7 +16,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({ products }) => {
   return (
     <Carousel autoPlay infiniteLoop interval={5000} emulateTouch showStatus={false} showThumbs={false}>
       {chunks.map((chunk, idx) => (
-        <div key={idx} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div key={idx} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' ,flexWrap: 'wrap'}}>
           {chunk.map(product => (
             <ProductCard key={product.id} product={product} />
           ))}

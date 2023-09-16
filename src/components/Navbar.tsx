@@ -41,7 +41,7 @@ const Navbar: React.FC = () => {
             </li>
           </ul>
           <ul className="navbar-nav  d-flex flex-row">
-            <li className="nav-item mx-5">
+            <li className="nav-item mx-5" style={{ width: "100px" }}>
               <ActiveNavLink
                 to="/product-register"
                 activeClassName="active-link"
@@ -52,28 +52,28 @@ const Navbar: React.FC = () => {
                 </span>
               </ActiveNavLink>
             </li>
-            <li className="nav-item mx-5">
+            <li className="nav-item mx-5" style={{ width: "100px" }}>
               <ActiveNavLink
                 to="/product-list"
                 activeClassName="active-link"
                 className="nav-link"
               >
-                <span className="h5" style={{ fontWeight: "bold" }}>
+                <span className="h5" style={{ fontWeight: "bold"}}>
                   축구화
                 </span>
               </ActiveNavLink>
             </li>
-            <li className="nav-item mx-5">
+            {/* <li className="nav-item mx-5">
               <NavLink className="nav-link" to="/userOnly/product-test">
                 <span className="h5" style={{ fontWeight: "bold" }}>
                   테스트
                 </span>
               </NavLink>
-            </li>
+            </li> */}
           </ul>
 
           <ul className="navbar-nav d-flex flex-row">
-            <li className="nav-item">
+            <li className="nav-item" style={{ width: "150px" }}>
               {/* <NavLink
                 className="nav-link  d-flex align-items-center"
                 to="/sign-up"
@@ -106,7 +106,7 @@ const Navbar: React.FC = () => {
                 </ActiveNavLink>
               )}
             </li>
-            <li className="nav-item mx-5">
+            <li className="nav-item mx-5" style={{ width: "100px" }}>
               {isLoggedIn ? (
                 // 로그인 상태일 경우, 로그아웃 버튼을 보여줍니다.
                 <button

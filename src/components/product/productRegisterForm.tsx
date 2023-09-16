@@ -67,7 +67,7 @@ const ProductRegisterForm: React.FC = () => {
   return (
     <>
       <Box
-        sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+        sx={{ display: "flex", flexDirection: "column", alignItems: "center"  ,minWidth:"350px"}}
       >
         <Typography variant="h4" gutterBottom sx={{ marginBottom: "40px" }}>
           상품 등록
