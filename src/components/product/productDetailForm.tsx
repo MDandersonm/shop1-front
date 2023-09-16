@@ -1,5 +1,8 @@
 import { addToCart, goToCheckOut } from "../../redux/actions/shoppingActions";
-import { fetchProduct } from "../../redux/actions/productActions";
+import {
+  deleteProduct,
+  fetchProduct,
+} from "../../redux/actions/productActions";
 import { RootState } from "@/redux/reducers";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import EditIcon from "@mui/icons-material/Edit";
@@ -69,6 +72,11 @@ const ProductDetailForm: React.FC = () => {
 
   const handleUpdateClick = (productId: number) => {
     navigate(`/product-update/${productId}`);
+  };
+  const handleDeleteClick = (productId: number) => {
+    dispatch(deleteProduct(productId));
+
+    navigate(`/product-list`);
   };
 
   if (loading) return <CircularProgress />;
@@ -172,7 +180,7 @@ const ProductDetailForm: React.FC = () => {
                 variant="outlined"
                 color="secondary"
                 onClick={() => {
-                  // 삭제 로직
+                  handleDeleteClick(product.id);
                 }}
               >
                 <DeleteIcon style={{ marginRight: "5px" }} />

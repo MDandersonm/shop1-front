@@ -1,5 +1,5 @@
 import mainRequest from "../../api/mainRequest";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import { Action } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "../reducers";
@@ -18,6 +18,9 @@ import {
   FETCH_PRODUCT_REQUEST,
   FETCH_PRODUCT_SUCCESS,
   FETCH_PRODUCT_FAILURE,
+  DELETE_PRODUCT,
+  DELETE_PRODUCT_SUCCESS,
+  DELETE_PRODUCT_FAILURE,
 } from "../types/productTypes";
 import axios, { AxiosError } from "axios";
 
@@ -38,8 +41,8 @@ export const saveProduct =
       if (imageFile) {
         formData.append("image", imageFile);
       }
-      if (detailImageFiles.length !==0) {
-        console.log("detailImageFiles",detailImageFiles)
+      if (detailImageFiles.length !== 0) {
+        console.log("detailImageFiles", detailImageFiles);
         detailImageFiles.forEach((file, index) => {
           formData.append("detailImages", file);
         });
@@ -59,7 +62,7 @@ export const saveProduct =
 
       const data = response.data; // axios는 자동으로 JSON을 파싱
       console.log(data);
-      toast.success("상품이 저장되었습니다!"); 
+      toast.success("상품이 저장되었습니다!");
       navigate("/product-list");
     } catch (error) {
       console.error("상품 저장 중 오류:", error);
@@ -149,8 +152,8 @@ export const fetchProduct =
 
     try {
       const response = await mainRequest.get(`/products/detail/${productId}`);
-      console.log("response.data",response.data)
-      console.log("response.data.detailImages",response.data.detailImages[0])
+      console.log("response.data", response.data);
+      console.log("response.data.detailImages", response.data.detailImages[0]);
       dispatch({ type: FETCH_PRODUCT_SUCCESS, payload: response.data });
     } catch (error) {
       const err = error as Error;
@@ -158,7 +161,7 @@ export const fetchProduct =
     }
   };
 
-  export const updateProduct =
+export const updateProduct =
   (
     product: IProduct,
     imageFile: File | null,
@@ -171,8 +174,8 @@ export const fetchProduct =
       if (imageFile) {
         formData.append("image", imageFile);
       }
-      if (detailImageFiles.length !==0) {
-        console.log("detailImageFiles",detailImageFiles)
+      if (detailImageFiles.length !== 0) {
+        console.log("detailImageFiles", detailImageFiles);
         detailImageFiles.forEach((file, index) => {
           formData.append("detailImages", file);
         });
@@ -184,7 +187,10 @@ export const fetchProduct =
         })
       );
 
-      const response = await mainRequest.put(`/products/update/${product.id}`, formData);
+      const response = await mainRequest.put(
+        `/products/update/${product.id}`,
+        formData
+      );
 
       if (response.status !== 200) {
         throw new Error("상품 저장 실패");
@@ -192,10 +198,27 @@ export const fetchProduct =
 
       const data = response.data; // axios는 자동으로 JSON을 파싱
       console.log(data);
-      toast.success("상품정보가 수정되었습니다!"); 
+      toast.success("상품정보가 수정되었습니다!");
       navigate("/product-list");
     } catch (error) {
       console.error("상품 수정 중 오류:", error);
       toast.error("상품 수정 중 오류 발생!");
+    }
+  };
+export const deleteProduct =
+  (
+    productId: number
+  ): ThunkAction<void, RootState, unknown, ProductActionTypes> =>
+  async (dispatch) => {
+    dispatch({ type: DELETE_PRODUCT });
+
+    try {
+      await mainRequest.delete(`/products/delete/${productId}`);
+      dispatch({ type: DELETE_PRODUCT_SUCCESS, payload: productId });
+      toast.success("삭제되었습니다!");
+    } catch (error) {
+      const err = error as Error;
+      dispatch({ type: DELETE_PRODUCT_FAILURE, error: err.message });
+      toast.error("상품 삭제에 실패하였습니다!");
     }
   };
