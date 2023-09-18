@@ -32,6 +32,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { checkUser } from "../../redux/actions/userActions";
 
 type RouteParams = {
   [key: string]: string | undefined;
@@ -55,6 +56,7 @@ const ProductDetailForm: React.FC = () => {
   };
 
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+  const user = useSelector((state: RootState) => state.user.user);
 
   const [openDialog, setOpenDialog] = React.useState(false);
 
@@ -87,6 +89,7 @@ const ProductDetailForm: React.FC = () => {
   };
 
   useEffect(() => {
+    dispatch(checkUser());
     dispatch(fetchProduct(productId));
   }, [dispatch, productId]);
 
@@ -195,29 +198,31 @@ const ProductDetailForm: React.FC = () => {
                   관심상품
                 </Button>
               </div>
-              <div style={{ marginTop: "35px", marginBottom: "24px" }}>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  style={{ marginRight: "10px" }}
-                  onClick={() => {
-                    handleUpdateClick(product.id);
-                  }}
-                >
-                  <EditIcon style={{ marginRight: "5px" }} />
-                  수정
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={() => {
-                    handleDeleteClick(product.id);
-                  }}
-                >
-                  <DeleteIcon style={{ marginRight: "5px" }} />
-                  삭제
-                </Button>
-              </div>
+              {user?.role === "ROLE_ADMIN" && (
+                <div style={{ marginTop: "35px", marginBottom: "24px" }}>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    style={{ marginRight: "10px" }}
+                    onClick={() => {
+                      handleUpdateClick(product.id);
+                    }}
+                  >
+                    <EditIcon style={{ marginRight: "5px" }} />
+                    수정
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() => {
+                      handleDeleteClick(product.id);
+                    }}
+                  >
+                    <DeleteIcon style={{ marginRight: "5px" }} />
+                    삭제
+                  </Button>
+                </div>
+              )}
             </Box>
           </Grid>
         </Grid>
