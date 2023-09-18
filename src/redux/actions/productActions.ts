@@ -151,7 +151,13 @@ export const fetchProduct =
     dispatch({ type: FETCH_PRODUCT_REQUEST });
 
     try {
-      const response = await mainRequest.get(`/products/detail/${productId}`);
+      const config = {
+        headers: {
+          // Authorization: "Bearer " + localStorage.getItem("token"),
+          Authorization: localStorage.getItem("token"),
+        },
+      };
+      const response = await mainRequest.get(`/products/detail/${productId}`,config);
       console.log("response.data", response.data);
       console.log("response.data.detailImages", response.data.detailImages[0]);
       dispatch({ type: FETCH_PRODUCT_SUCCESS, payload: response.data });
@@ -187,9 +193,16 @@ export const updateProduct =
         })
       );
 
+      const config = {
+        headers: {
+          // Authorization: "Bearer " + localStorage.getItem("token"),
+          Authorization: localStorage.getItem("token"),
+        },
+      };
+
       const response = await mainRequest.put(
         `/products/onlyadmin/update/${product.id}`,
-        formData
+        formData,config
       );
 
       if (response.status !== 200) {
@@ -213,7 +226,13 @@ export const deleteProduct =
     dispatch({ type: DELETE_PRODUCT });
 
     try {
-      await mainRequest.delete(`/products/onlyadmin/delete/${productId}`);
+      const config = {
+        headers: {
+          // Authorization: "Bearer " + localStorage.getItem("token"),
+          Authorization: localStorage.getItem("token"),
+        },
+      };
+      await mainRequest.delete(`/products/onlyadmin/delete/${productId}`,config);
       dispatch({ type: DELETE_PRODUCT_SUCCESS, payload: productId });
       toast.success("삭제되었습니다!");
     } catch (error) {
