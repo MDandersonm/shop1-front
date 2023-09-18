@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useMatch, Link, NavLink, useNavigate } from "react-router-dom";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
@@ -6,21 +6,40 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ActiveNavLink from "./ActiveNavLink";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/reducers";
-import { logout } from "../redux/actions/userActions";
+import { checkUser, logout } from "../redux/actions/userActions";
 import { AppDispatch } from "../index";
 const Navbar: React.FC = () => {
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
+
+  const user = useSelector((state: RootState) => state.user.user); // 현재 사용자 정보 가져오기
+
+  const [needAdminCheck, setNeedAdminCheck] = React.useState(false); // 관리자 확인 필요 여부를 저장
+
   const handleLogout = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    event.preventDefault(); // 버튼의 기본 동작인 폼 제출을 막습니다.
-    dispatch(logout()); // 로그아웃 액션을 디스패치합니다.
+    event.preventDefault(); 
+    dispatch(logout()); 
   };
   const handleNavigateToCart = () => {
     dispatch({ type: "RESET_CHECKOUT_FLOW" });
     navigate("/cart");
+  };
+
+  useEffect(() => {
+    if (needAdminCheck) {
+      if (user?.role !== "ROLE_ADMIN") {
+        alert("관리자만 접근 가능합니다.");
+      }
+      setNeedAdminCheck(false); // 관리자 확인 작업이 끝났으므로 다시 false로 설정
+    }
+  }, [user, needAdminCheck]);
+
+  const handleProductRegisterClick = (event: React.MouseEvent) => {
+    dispatch(checkUser()); // checkUser 액션을 디스패치하여 사용자 정보를 갱신
+    setNeedAdminCheck(true); // 관리자 확인이 필요하므로 true로 설정
   };
   return (
     <nav
@@ -46,6 +65,7 @@ const Navbar: React.FC = () => {
                 to="/product-register"
                 activeClassName="active-link"
                 className="nav-link"
+                onClick={handleProductRegisterClick}
               >
                 <span className="h5" style={{ fontWeight: "bold" }}>
                   상품등록

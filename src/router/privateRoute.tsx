@@ -15,7 +15,7 @@ const PrivateRoute: React.FC<any> = ({ children, allowedRoles }) => {
   if (!user) {
     //user가 없을때(비회원일때)
     console.log("user", user);
-    return <Navigate to="/sign-in" />;
+    return <Navigate to="/sign-in" replace />; //repalce넣어서 뒤로가기안되는 문제 해결
   } else if (allowedRoles && !allowedRoles.includes(user.role)) {
     console.log("user", user);
     return (

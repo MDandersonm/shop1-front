@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Action } from "redux";
+import { Action, Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "../reducers";
 import {
@@ -8,10 +8,9 @@ import {
   SignInPayload,
   LOGOUT,
   USER_INFO,
+  LOGIN_SUCCESS,
 } from "../types/userTypes"; // userTypes.ts에서 타입들을 가져옵니다.
 import mainRequest from "../../api/mainRequest";
-
-
 
 export const checkUser =
   (): ThunkAction<void, RootState, unknown, Action<string>> =>
@@ -24,10 +23,10 @@ export const checkUser =
           Authorization: localStorage.getItem("token"),
         },
       };
-      console.log("config.headers.Authorization",config.headers.Authorization)
+      console.log("config.headers.Authorization", config.headers.Authorization);
 
       const response = await mainRequest.get("/user/onlyuser/userinfo", config);
-      console.log("response.data",response.data)
+      console.log("response.data", response.data);
       dispatch({
         type: USER_INFO,
         payload: response.data,
@@ -57,7 +56,6 @@ export const signUp =
       console.error(error);
     }
   };
-
 
 export const signIn =
   (
@@ -121,3 +119,20 @@ export const logout =
       console.error(error);
     }
   };
+
+export const loginSuccess = () => {
+  return {
+    type: LOGIN_SUCCESS,
+  };
+};
+
+export const checkLoginStatus = () => {
+  return (dispatch: Dispatch) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      dispatch(loginSuccess());
+    } else {
+      dispatch({ type: LOGOUT });
+    }
+  };
+};

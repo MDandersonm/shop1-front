@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import "./App.css";
@@ -6,6 +6,8 @@ import routes from "./router/routes";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import PrivateRoute from "./router/privateRoute";
+import { useDispatch } from "react-redux";
+import { checkLoginStatus } from "./redux/actions/userActions";
 
 type RouteType = {
   path: string;
@@ -14,6 +16,12 @@ type RouteType = {
 };
 
 const App: React.FC = () => {
+  const dispatch: Dispatch<any> = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkLoginStatus());
+  }, [dispatch]);
+
   return (
     <div className="App">
       <Navbar />
@@ -48,8 +56,6 @@ const App: React.FC = () => {
 };
 
 export default App;
-
-
 
 // import React from "react";
 // import { Routes, Route } from "react-router-dom";

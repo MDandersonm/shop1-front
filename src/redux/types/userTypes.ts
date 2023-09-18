@@ -23,6 +23,9 @@ export interface User {
   export const SIGN_IN = "user/SIGN_IN";
   export const LOGOUT="LOGOUT";
   export const USER_INFO="USER_INFO";
+  export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+
+
 
   export interface SignInAction {
     type: typeof SIGN_IN;
@@ -32,6 +35,10 @@ export interface User {
 
 export interface LogoutAction {
   type: typeof LOGOUT;
+}
+export interface LoginSucessAction {
+  type: typeof LOGIN_SUCCESS;
+  payload:boolean;
 }
   /*
 type: 이 프로퍼티는 액션의 타입을 나타내며,
@@ -45,7 +52,7 @@ export interface UserInfoAction {
   payload: User;
 }
   
-  export type UserActionTypes =  SignInAction  | LogoutAction | UserInfoAction ;  // If you have other actions, you can add them here using a pipe ('|')
+  export type UserActionTypes = LoginSucessAction| SignInAction  | LogoutAction | UserInfoAction ;  // If you have other actions, you can add them here using a pipe ('|')
   
   // State Type
   export interface UserState {
