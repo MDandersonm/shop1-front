@@ -53,8 +53,14 @@ export const saveProduct =
           type: "application/json",
         })
       );
+      const config = {
+        headers: {
+          // Authorization: "Bearer " + localStorage.getItem("token"),
+          Authorization: localStorage.getItem("token"),
+        },
+      };
 
-      const response = await mainRequest.post("/products/onlyadmin/register", formData);
+      const response = await mainRequest.post("/products/onlyadmin/register", formData,config);
 
       if (response.status !== 200) {
         throw new Error("상품 저장 실패");
@@ -151,13 +157,8 @@ export const fetchProduct =
     dispatch({ type: FETCH_PRODUCT_REQUEST });
 
     try {
-      const config = {
-        headers: {
-          // Authorization: "Bearer " + localStorage.getItem("token"),
-          Authorization: localStorage.getItem("token"),
-        },
-      };
-      const response = await mainRequest.get(`/products/detail/${productId}`,config);
+      
+      const response = await mainRequest.get(`/products/detail/${productId}`);
       console.log("response.data", response.data);
       console.log("response.data.detailImages", response.data.detailImages[0]);
       dispatch({ type: FETCH_PRODUCT_SUCCESS, payload: response.data });
