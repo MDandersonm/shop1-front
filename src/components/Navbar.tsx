@@ -58,7 +58,7 @@ const Navbar: React.FC = () => {
                 activeClassName="active-link"
                 className="nav-link"
               >
-                <span className="h5" style={{ fontWeight: "bold"}}>
+                <span className="h5" style={{ fontWeight: "bold" }}>
                   축구화
                 </span>
               </ActiveNavLink>
@@ -106,9 +106,21 @@ const Navbar: React.FC = () => {
                 </ActiveNavLink>
               )}
             </li>
-            <li className="nav-item mx-5" style={{ width: "100px" }}>
+            <li className="nav-item mx-5" style={{ width: "150px" }}>
               {isLoggedIn ? (
                 // 로그인 상태일 경우, 로그아웃 버튼을 보여줍니다.
+
+                // <ActiveNavLink
+                //   onClick={handleLogout}
+                //   className="nav-link"
+                //   activeClassName="active-link"
+                //   to="/sign-out"
+                // >
+                //   <div className="d-flex align-items-center">
+                //     <ExitToAppIcon className="mx-2" />
+                //     <span className="">로그아웃</span>
+                //   </div>
+                // </ActiveNavLink>
                 <button
                   onClick={handleLogout}
                   className="nav-link d-flex align-items-center"
@@ -118,6 +130,7 @@ const Navbar: React.FC = () => {
                 </button>
               ) : (
                 // 로그인 상태가 아닐 경우, 로그인 버튼을 보여줍니다.
+
                 <ActiveNavLink
                   className="nav-link"
                   activeClassName="active-link"
