@@ -2,8 +2,41 @@ import axios from "axios";
 import { Action } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "../reducers";
-import { User, SIGN_IN, SignInPayload,LOGOUT } from "../types/userTypes"; // userTypes.ts에서 타입들을 가져옵니다.
+import {
+  User,
+  SIGN_IN,
+  SignInPayload,
+  LOGOUT,
+  USER_INFO,
+} from "../types/userTypes"; // userTypes.ts에서 타입들을 가져옵니다.
 import mainRequest from "../../api/mainRequest";
+
+
+
+export const checkUser =
+  (): ThunkAction<void, RootState, unknown, Action<string>> =>
+  async (dispatch, getState) => {
+    try {
+      console.log("check-try");
+      const config = {
+        headers: {
+          // Authorization: "Bearer " + localStorage.getItem("token"),
+          Authorization: localStorage.getItem("token"),
+        },
+      };
+      console.log("config.headers.Authorization",config.headers.Authorization)
+
+      const response = await mainRequest.get("/user/onlyuser/userinfo", config);
+      console.log("response.data",response.data)
+      dispatch({
+        type: USER_INFO,
+        payload: response.data,
+      });
+    } catch (error) {
+      console.log("check 실패!");
+      console.error(error);
+    }
+  };
 
 export const signUp =
   (
@@ -24,6 +57,7 @@ export const signUp =
       console.error(error);
     }
   };
+
 
 export const signIn =
   (
@@ -57,14 +91,10 @@ export const signIn =
       console.log("response:", response);
       console.log("response.headers:", response.headers);
       console.log(
-        "response.headers.getAuthorization:",
-        response.headers.getAuthorization
+        "response.headers.authorization:",
+        response.headers.authorization
       );
-      console.log(
-        "response.headers.Authorization:",
-        response.headers.Authorization
-      );
-      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("token", response.headers.authorization);
       alert("로그인 성공");
       //로그인 후 사용자정보 state에 넣기, 토큰이용한 검증
     } catch (error) {
@@ -86,7 +116,7 @@ export const logout =
 
       // localStorage에서 토큰 제거
       localStorage.removeItem("token");
-      alert('로그아웃 완료')
+      alert("로그아웃 완료");
     } catch (error) {
       console.error(error);
     }

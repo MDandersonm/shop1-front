@@ -54,7 +54,7 @@ export const saveProduct =
         })
       );
 
-      const response = await mainRequest.post("/products/register", formData);
+      const response = await mainRequest.post("/products/onlyadmin/register", formData);
 
       if (response.status !== 200) {
         throw new Error("상품 저장 실패");
@@ -188,7 +188,7 @@ export const updateProduct =
       );
 
       const response = await mainRequest.put(
-        `/products/update/${product.id}`,
+        `/products/onlyadmin/update/${product.id}`,
         formData
       );
 
@@ -213,7 +213,7 @@ export const deleteProduct =
     dispatch({ type: DELETE_PRODUCT });
 
     try {
-      await mainRequest.delete(`/products/delete/${productId}`);
+      await mainRequest.delete(`/products/onlyadmin/delete/${productId}`);
       dispatch({ type: DELETE_PRODUCT_SUCCESS, payload: productId });
       toast.success("삭제되었습니다!");
     } catch (error) {

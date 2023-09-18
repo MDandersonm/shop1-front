@@ -1,4 +1,4 @@
-import { UserState, UserActionTypes, SIGN_IN, LOGOUT } from '../types/userTypes'; // userTypes.ts에서 타입들을 가져옵니다.
+import { UserState, UserActionTypes, SIGN_IN, LOGOUT, USER_INFO } from '../types/userTypes'; // userTypes.ts에서 타입들을 가져옵니다.
 
 // Initial State
 const initialState: UserState = {
@@ -25,6 +25,11 @@ export const userReducer = (
         ...state,
         isLoggedIn: false,
         user: null
+      };
+      case USER_INFO:
+      return {
+        ...state,
+        user: action.payload
       };
     default:
       return state;

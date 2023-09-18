@@ -4,12 +4,13 @@ import ProductRegisterPage from "../pages/product/productRegisterPage";
 import ProductDetailPage from "../pages/product/productDetailPage";
 import ProductUpdatePage from "../pages/product/productUpdatePage";
 
-
+// allowedRoles: ['user', 'admin'] // 회원 및 관리자 접근 가능
 
 const productRoutes = [
   {
     path: "/product-register",
     component: ProductRegisterPage,
+    allowedRoles: ['ROLE_ADMIN'] // 관리자만 접근 가능
   },
   {
     path: "/product-list",
@@ -22,6 +23,7 @@ const productRoutes = [
   {
     path: "/product-update/:id",
     component: ProductUpdatePage,
+    allowedRoles: ['ROLE_ADMIN'] // 관리자만 접근 가능
   },
   {
     path: "/userOnly/product-test",
