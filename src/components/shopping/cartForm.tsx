@@ -65,98 +65,119 @@ const CartForm: React.FC<CartFormProps> = ({ isCheckout = false }) => {
     navigate("/checkout");
   };
   return (
-    <div>
-      {items.map((item, index) => (
-        <Card
-          key={item.product.id + item.size}
-          style={{ display: "flex", marginBottom: "20px" }}
-        >
-          <CardMedia
-            component="img"
-            image={
-              item.product.image
-                ? `/images/product/${item.product.image}`
-                : "/path/to/default/image.jpg"
-            }
-            alt={item.product.name}
-            style={{ width: "150px" }}
-          />
-          <CardContent style={{ flexGrow: 1 }}>
-            <Typography variant="h5">{item.product.name}</Typography>
-            <Typography>brand: {item.product.brand}</Typography>
-            <Typography>Size: {item.size}</Typography>
-            <Typography>
-              Price: {Number(item.product.price).toLocaleString()}원
-            </Typography>
-          </CardContent>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              marginRight: "10px",
-            }}
-          >
-            <TextField
-              value={item.quantity}
-              type="number"
-              inputProps={{ min: 1, readOnly: isCheckout }} // isCheckout이 true이면 readOnly 속성 적용
-              style={{ width: "50px", margin: "0 20px" }}
-              onChange={
-                isCheckout
-                  ? undefined
-                  : (e) => handleQuantityChange(index, +e.target.value)
-              } // + 기호를 붙이면, JavaScript는 해당 문자열을 숫자로 변환
-            />
-
-            <Typography style={{ margin: "0 20px" }}>
-              Total:{" "}
-              {Number(item.product.price * item.quantity).toLocaleString()}원
-            </Typography>
-          </div>
-          <div
-            style={{
-              //   flexDirection: "row",
-              alignItems: "center",
-              marginRight: "10px",
-              display: isCheckout ? "none" : "flex",
-            }}
-          >
-            <Button
-              variant="contained"
-              color="secondary"
-              style={{
-                // backgroundColor: "darkred",
-                // color: "white",
-                height: "40px",
-              }}
-              onClick={() =>
-                dispatch(removeFromCart(item.product.id, item.size))
-              }
+    <div
+      style={{
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {items.length === 0 ? ( // 상품이 없을 때
+        <Typography variant="h6" style={{ textAlign: "center" }}>
+          상품이 없습니다!
+        </Typography>
+      ) : (
+        //상품이 있을때
+        <>
+          {items.map((item, index) => (
+            <Card
+              key={item.product.id + item.size}
+              style={{ display: "flex", marginBottom: "20px", minWidth:"800px" }}
             >
-              Remove
-            </Button>
-          </div>
-        </Card>
-      ))}
-      <Typography
-        variant="h6"
-        style={{ textAlign: "right", marginRight: "20px" }}
-      >
-        Total Price: {Number(totalPrice).toLocaleString()}원
-      </Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        style={{
-          display: isCheckout ? "none" : "block",
-          margin: "20px auto",
-          width: "100px",
-        }}
-        onClick={handlePaymentClick}
-      >
-        결제
-      </Button>
+              <CardMedia
+                component="img"
+                image={
+                  item.product.image
+                    ? `/images/product/${item.product.image}`
+                    : "/path/to/default/image.jpg"
+                }
+                alt={item.product.name}
+                style={{ width: "150px" }}
+              />
+              <CardContent style={{ flexGrow: 1 }}>
+                <Typography variant="h5">{item.product.name}</Typography>
+                <Typography>brand: {item.product.brand}</Typography>
+                <Typography>Size: {item.size}</Typography>
+                <Typography>
+                  Price: {Number(item.product.price).toLocaleString()}원
+                </Typography>
+              </CardContent>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginRight: "10px",
+                }}
+              >
+                <TextField
+                  value={item.quantity}
+                  type="number"
+                  inputProps={{ min: 1, readOnly: isCheckout }} // isCheckout이 true이면 readOnly 속성 적용
+                  style={{ width: "50px", margin: "0 20px" }}
+                  onChange={
+                    isCheckout
+                      ? undefined
+                      : (e) => handleQuantityChange(index, +e.target.value)
+                  } // + 기호를 붙이면, JavaScript는 해당 문자열을 숫자로 변환
+                />
+
+                <Typography style={{ margin: "0 20px" }}>
+                  Total:{" "}
+                  {Number(item.product.price * item.quantity).toLocaleString()}
+                  원
+                </Typography>
+              </div>
+              <div
+                style={{
+                  //   flexDirection: "row",
+                  alignItems: "center",
+                  marginRight: "10px",
+                  display: isCheckout ? "none" : "flex",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  style={{
+                    // backgroundColor: "darkred",
+                    // color: "white",
+                    height: "40px",
+                  }}
+                  onClick={() =>
+                    dispatch(removeFromCart(item.product.id, item.size))
+                  }
+                >
+                  Remove
+                </Button>
+              </div>
+            </Card>
+          ))}
+          
+
+          <Typography
+            variant="h6"
+            style={{ textAlign: "right", marginRight: "20px" }}
+          >
+            Total Price: {Number(totalPrice).toLocaleString()}원
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={items.length === 0} // 상품이 없으면 버튼 비활성화
+            style={{
+              display: isCheckout ? "none" : "block",
+              margin: "20px auto",
+              width: "100px",
+            }}
+            onClick={handlePaymentClick}
+          >
+            결제
+          </Button>
+        </>
+      )}
     </div>
   );
 };
