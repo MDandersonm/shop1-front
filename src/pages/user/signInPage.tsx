@@ -4,7 +4,7 @@ import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { RootState } from "@/redux/reducers";
 import { signIn } from "../../redux/actions/userActions";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import Avatar from "@mui/material/Avatar";
@@ -13,13 +13,19 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
+import MUILink from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 // import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+import { FaGoogle, FaFacebook } from "react-icons/fa";
+import mainRequest from "../../api/mainRequest";
+import GoogleLogin from "@leecheuk/react-google-login";
+import axios from "axios";
+
 function Copyright(props: any) {
   return (
     <Typography
@@ -29,9 +35,9 @@ function Copyright(props: any) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="#">
+      <MUILink color="inherit" href="#">
         Your Website
-      </Link>{" "}
+      </MUILink>{" "}
       {new Date().getFullYear()}
       {"."}
     </Typography>
@@ -44,12 +50,13 @@ const SignInPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch: ThunkDispatch<RootState, unknown, AnyAction> = useDispatch();
   const user = useSelector((state: RootState) => state.user); // Get the current user state
-  React.useEffect(() => {//로그인이 성공하면 메인페이지로 이동
+  React.useEffect(() => {
+    //로그인이 성공하면 메인페이지로 이동
     if (user.isLoggedIn) {
       navigate("/");
     }
   }, [user.isLoggedIn, navigate]);
-  
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -61,9 +68,20 @@ const SignInPage: React.FC = () => {
     console.log("signin-handleSubmit메서드 작동");
     console.log("userData:", userData);
     await dispatch(signIn(userData));
-    console.log("user.isLoggedIn:",user.isLoggedIn)
- 
+    console.log("user.isLoggedIn:", user.isLoggedIn);
   };
+
+  // const handleGoogleLogin = async () => {
+  // };
+  
+  // const handleFacebookLogin = () => {
+  // };
+  
+  // const handleNaverLogin =async () => {
+  // };
+
+
+
   return (
     // <ThemeProvider theme={defaultTheme}>
     <Container component="main" maxWidth="xs">
@@ -122,18 +140,65 @@ const SignInPage: React.FC = () => {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <MUILink href="#" variant="body2">
                 Forgot password?
-              </Link>
+              </MUILink>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <MUILink href="#" variant="body2">
                 {"Don't have an account? Sign Up"}
-              </Link>
+              </MUILink>
             </Grid>
           </Grid>
         </Box>
       </Box>
+
+      {/* <Box
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          minWidth: "300px",
+        }}
+      >
+        <Button
+          fullWidth
+          variant="outlined"
+          startIcon={<FaGoogle />}
+          sx={{ mt: 2, mb: 1 }}
+          onClick={handleGoogleLogin}
+        >
+          구글 로그인
+        </Button>
+
+        <Button
+          fullWidth
+          variant="outlined"
+          startIcon={<FaFacebook />}
+          sx={{ mt: 2, mb: 1 }}
+          onClick={handleFacebookLogin}
+        >
+          페이스북 로그인
+        </Button>
+
+        <Button
+          fullWidth
+          variant="outlined"
+          sx={{ mt: 2, mb: 1 }}
+          startIcon={
+            <img
+              src={`/images/naver_logo.png`}
+              alt="Naver"
+              style={{ width: "24px", height: "24px" }}
+            />
+          }
+          onClick={handleNaverLogin}
+        >
+          네이버 로그인
+        </Button>
+      </Box> */}
+
       <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
     // </ThemeProvider>
