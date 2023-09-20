@@ -71,6 +71,7 @@ const ProductDetailForm: React.FC = () => {
   const handleAddToCart = () => {
     //장바구니 추가
     if (product) {
+      console.log("user?.username",user?.username);
       dispatch(addToCart("cart", product, selectedSize));
       toast.success("장바구니에 추가되었습니다!");
     } else {
@@ -108,7 +109,9 @@ const ProductDetailForm: React.FC = () => {
 
   return (
     <>
-      <Container>
+      <Container style={{
+                minWidth: "800px",
+              }}>
         <Grid container spacing={4}>
           <Grid item xs={6}>
             <img
