@@ -20,8 +20,8 @@ const Navbar: React.FC = () => {
   const handleLogout = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    event.preventDefault(); 
-    dispatch(logout()); 
+    event.preventDefault();
+    dispatch(logout());
   };
   const handleNavigateToCart = () => {
     dispatch({ type: "RESET_CHECKOUT_FLOW" });
@@ -29,7 +29,10 @@ const Navbar: React.FC = () => {
   };
 
   useEffect(() => {
+    console.log("navbar useEffect 작동");
+    console.log("needAdminCheck", needAdminCheck);
     if (needAdminCheck) {
+      console.log("user?.role", user?.role);
       if (user?.role !== "ROLE_ADMIN") {
         alert("관리자만 접근 가능합니다.");
       }
@@ -37,8 +40,8 @@ const Navbar: React.FC = () => {
     }
   }, [user, needAdminCheck]);
 
-  const handleProductRegisterClick = (event: React.MouseEvent) => {
-    dispatch(checkUser()); // checkUser 액션을 디스패치하여 사용자 정보를 갱신
+  const handleProductRegisterClick = async (event: React.MouseEvent) => {
+    await dispatch(checkUser()); // checkUser 액션을 디스패치하여 사용자 정보를 갱신
     setNeedAdminCheck(true); // 관리자 확인이 필요하므로 true로 설정
   };
   return (
