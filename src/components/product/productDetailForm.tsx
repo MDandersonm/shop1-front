@@ -2,6 +2,7 @@ import { addToCart, goToCheckOut } from "../../redux/actions/shoppingActions";
 import {
   deleteProduct,
   fetchProduct,
+  fetchProducts,
 } from "../../redux/actions/productActions";
 import { RootState } from "@/redux/reducers";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -34,12 +35,18 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { checkUser } from "../../redux/actions/userActions";
 
+import thunk, { ThunkDispatch } from "redux-thunk";
+
+type AppDispatch = ThunkDispatch<RootState, any, any>;
+
 type RouteParams = {
   [key: string]: string | undefined;
 };
 
 const ProductDetailForm: React.FC = () => {
   const dispatch: Dispatch<any> = useDispatch();
+  const dispatch1: AppDispatch = useDispatch();
+
   const navigate = useNavigate();
 
   const { product, loading, error } = useSelector(
@@ -100,8 +107,15 @@ const ProductDetailForm: React.FC = () => {
   const handleUpdateClick = (productId: number) => {
     navigate(`/product-update/${productId}`);
   };
+
   const handleDeleteClick = (productId: number) => {
-    dispatch(deleteProduct(productId));
+    dispatch1(deleteProduct(productId))
+      .then(() => {
+        dispatch1(fetchProducts());
+      })
+      .catch((error: any) => {
+        console.error("Error while deleting product:", error);
+      });
 
     navigate(`/product-list`);
   };

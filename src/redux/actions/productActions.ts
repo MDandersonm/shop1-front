@@ -60,7 +60,11 @@ export const saveProduct =
         },
       };
 
-      const response = await mainRequest.post("/products/onlyadmin/register", formData,config);
+      const response = await mainRequest.post(
+        "/products/onlyadmin/register",
+        formData,
+        config
+      );
 
       if (response.status !== 200) {
         throw new Error("상품 저장 실패");
@@ -157,7 +161,6 @@ export const fetchProduct =
     dispatch({ type: FETCH_PRODUCT_REQUEST });
 
     try {
-      
       const response = await mainRequest.get(`/products/detail/${productId}`);
       console.log("response.data", response.data);
       console.log("response.data.detailImages", response.data.detailImages[0]);
@@ -203,7 +206,8 @@ export const updateProduct =
 
       const response = await mainRequest.put(
         `/products/onlyadmin/update/${product.id}`,
-        formData,config
+        formData,
+        config
       );
 
       if (response.status !== 200) {
@@ -219,26 +223,33 @@ export const updateProduct =
       toast.error("상품 수정 중 오류 발생!");
     }
   };
+
 export const deleteProduct =
   (
     productId: number
-  ): ThunkAction<void, RootState, unknown, ProductActionTypes> =>
-  async (dispatch) => {
-    dispatch({ type: DELETE_PRODUCT });
+  ): ThunkAction<Promise<void>, RootState, unknown, ProductActionTypes> => // 반환 타입 변경
+  (dispatch) => {
+    return new Promise<void>(async (resolve, reject) => {
+      dispatch({ type: DELETE_PRODUCT });
 
-    try {
-      const config = {
-        headers: {
-          // Authorization: "Bearer " + localStorage.getItem("token"),
-          Authorization: localStorage.getItem("token"),
-        },
-      };
-      await mainRequest.delete(`/products/onlyadmin/delete/${productId}`,config);
-      dispatch({ type: DELETE_PRODUCT_SUCCESS, payload: productId });
-      toast.success("삭제되었습니다!");
-    } catch (error) {
-      const err = error as Error;
-      dispatch({ type: DELETE_PRODUCT_FAILURE, error: err.message });
-      toast.error("상품 삭제에 실패하였습니다!");
-    }
+      try {
+        const config = {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        };
+        await mainRequest.delete(
+          `/products/onlyadmin/delete/${productId}`,
+          config
+        );
+        dispatch({ type: DELETE_PRODUCT_SUCCESS, payload: productId });
+        toast.success("삭제되었습니다!");
+        resolve();
+      } catch (error) {
+        const err = error as Error;
+        dispatch({ type: DELETE_PRODUCT_FAILURE, error: err.message });
+        toast.error("상품 삭제에 실패하였습니다!");
+        reject(error);
+      }
+    });
   };
