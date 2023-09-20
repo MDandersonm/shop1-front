@@ -51,9 +51,11 @@ const CartForm: React.FC<CartFormProps> = ({ isCheckout = false }) => {
         );
       }
 
-      setItems(relevantItems);
+      if (JSON.stringify(relevantItems) !== JSON.stringify(items)) {
+        setItems(relevantItems);
+      }
     }
-  }, [checkoutFlow, cartItemsFromState, singleItem, user?.id, dispatch, user]);
+  }, [checkoutFlow, cartItemsFromState, singleItem, dispatch]);
 
   // const totalPrice = items.reduce((acc, item) => {
   //   const price =
