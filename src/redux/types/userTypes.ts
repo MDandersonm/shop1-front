@@ -1,5 +1,6 @@
 // User shape 정의
 export interface User {
+    id?:number;
     email: string;
     password: string;// 실제 상황에서는 비밀번호를 state에 저장하지 않는 것이 좋음
     username?: string;

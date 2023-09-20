@@ -71,9 +71,10 @@ const ProductDetailForm: React.FC = () => {
   const handleAddToCart = () => {
     //장바구니 추가
     if (product) {
-      console.log("user?.username",user?.username);
-      dispatch(addToCart("cart", product, selectedSize));
-      toast.success("장바구니에 추가되었습니다!");
+      if (user && user.id) {
+        dispatch(addToCart(user.id, "cart", product, selectedSize));
+        toast.success("장바구니에 추가되었습니다!");
+      }
     } else {
       alert("product가 null입니다");
     }
@@ -82,8 +83,10 @@ const ProductDetailForm: React.FC = () => {
   const handleGoToCheckOut = () => {
     //바로구매
     if (product) {
-      dispatch(goToCheckOut("direct", product, selectedSize));
-      navigate("/checkout");
+      if (user && user.id) {
+        dispatch(goToCheckOut(user.id, "direct", product, selectedSize));
+        navigate("/checkout");
+      }
     } else {
       alert("product가 null입니다");
     }
@@ -109,9 +112,11 @@ const ProductDetailForm: React.FC = () => {
 
   return (
     <>
-      <Container style={{
-                minWidth: "800px",
-              }}>
+      <Container
+        style={{
+          minWidth: "800px",
+        }}
+      >
         <Grid container spacing={4}>
           <Grid item xs={6}>
             <img

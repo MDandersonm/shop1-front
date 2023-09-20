@@ -16,37 +16,37 @@ export const resetCheckoutFlow = () => {
     type: RESET_CHECKOUT_FLOW
   };
 };
-export const goToCheckOut = (flow:string,product: IProduct, size: string) => {
+export const goToCheckOut = (userId: number,flow:string,product: IProduct, size: string) => {
   return {
     type: GO_TO_CHECKOUT,
-    payload: {flow, product, size, quantity: 1 }
+    payload: {flow, product, size,userId, quantity: 1 }
   };
 };
 
-export const addToCart = (flow:string,product: IProduct, size: string) => {
+export const addToCart = (userId:number, flow:string,product: IProduct, size: string) => {
   return {
     type: ADD_TO_CART,
-    payload: {flow, product, size, quantity: 1 }
+    payload: {userId, flow, product, size, quantity: 1 }
   };
 };
 
-export const removeFromCart = (productId: string,size: string) => {
+export const removeFromCart = (userId:number, productId: number,size: string) => {
   return {
     type: REMOVE_FROM_CART,
-    payload: { productId, size }
+    payload: {userId, productId, size }
   };
 };
 
-export const incrementQuantity = (productId: string,size: string) => {
+export const incrementQuantity = (userId:number, productId: number,size: string) => {
   return {
     type: INCREMENT_QUANTITY,
-    payload: { productId, size }
+    payload: { userId,productId, size }
   };
 };
 
-export const decrementQuantity = (productId: string,size: string) => {
+export const decrementQuantity = (userId:number, productId: number,size: string) => {
   return {
     type: DECREMENT_QUANTITY,
-    payload: { productId, size }
+    payload: {userId, productId, size }
   };
 };

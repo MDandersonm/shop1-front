@@ -35,7 +35,8 @@ export const shoppingReducer = (
 
     case ADD_TO_CART:
       const existingProductIndex = state.cart.findIndex(
-        (item) =>
+        item =>
+          item.userId === action.payload.userId &&
           item.product.id === action.payload.product.id &&
           item.size === action.payload.size
       );
@@ -71,6 +72,7 @@ export const shoppingReducer = (
         cart: state.cart.filter(
           (item) =>
             !(
+              item.userId === action.payload.userId &&
               item.product.id === action.payload.productId &&
               item.size === action.payload.size
             )
@@ -81,6 +83,7 @@ export const shoppingReducer = (
       return {
         ...state,
         cart: state.cart.map((item) =>
+        item.userId === action.payload.userId &&
           item.product.id === action.payload.productId &&
           item.size === action.payload.size
             ? { ...item, quantity: item.quantity + 1 }
@@ -91,6 +94,7 @@ export const shoppingReducer = (
       return {
         ...state,
         cart: state.cart.map((item) =>
+        item.userId === action.payload.userId &&
           item.product.id === action.payload.productId &&
           item.size === action.payload.size &&
           item.quantity > 1

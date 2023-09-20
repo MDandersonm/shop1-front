@@ -11,6 +11,11 @@ export interface IProduct {
   detailImages?: IProductDetailImage[];
 }
 
+// export interface IProductFormState extends Omit<IProduct, 'price'> {
+//   price: string;
+// }
+
+
 // Action Types
 export const SAVE_PRODUCT_REQUEST = "SAVE_PRODUCT_REQUEST";
 export const SAVE_PRODUCT_SUCCESS = "SAVE_PRODUCT_SUCCESS";

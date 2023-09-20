@@ -1,5 +1,5 @@
 // CartPage.tsx
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -16,11 +16,14 @@ import {
   decrementQuantity,
 } from "../../redux/actions/shoppingActions";
 import { useNavigate } from "react-router-dom";
-import { CartFormProps } from "../../redux/types/shoppingTypes";
+import { CartFormProps, CartItem } from "../../redux/types/shoppingTypes";
+import { checkUser } from "../../redux/actions/userActions";
 
 const CartForm: React.FC<CartFormProps> = ({ isCheckout = false }) => {
-  const dispatch = useDispatch();
+  const dispatch: Dispatch<any> = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.user.user);
+
   const checkoutFlow = useSelector(
     (state: RootState) => state.shopping.checkoutFlow
   );
@@ -34,16 +37,33 @@ const CartForm: React.FC<CartFormProps> = ({ isCheckout = false }) => {
   const [items, setItems] = useState(cartItemsFromState); // 로컬 상태로 항목들을 관리
 
   useEffect(() => {
-    if (checkoutFlow === "direct") {
-      setItems([singleItem]); // 바로구매를 통한 접근이면 singleItem만을 배열에 담습니다.
-    } else if (checkoutFlow === "cart") {
-      setItems(cartItemsFromState); // 장바구니를 거쳐온 경우에는 cartItems를 그대로 사용합니다.
-    }
-  }, [checkoutFlow, cartItemsFromState, singleItem]);
+    if (user && user.id) {
+      dispatch(checkUser());
+      let relevantItems: CartItem[] = [];
 
+      if (checkoutFlow === "direct") {
+        if (singleItem?.userId === user.id) {
+          relevantItems.push(singleItem);
+        }
+      } else if (checkoutFlow === "cart") {
+        relevantItems = cartItemsFromState.filter(
+          (item) => item.userId === user.id
+        );
+      }
+
+      setItems(relevantItems);
+    }
+  }, [checkoutFlow, cartItemsFromState, singleItem, user?.id, dispatch, user]);
+
+  // const totalPrice = items.reduce((acc, item) => {
+  //   const price =
+  //     typeof item.product.price === "number" ? item.product.price : 0;
+  //   const quantity = typeof item.quantity === "number" ? item.quantity : 0;
+
+  //   return acc + price * quantity;
+  // }, 0);
   const totalPrice = items.reduce((acc, item) => {
-    const price =
-      typeof item.product.price === "number" ? item.product.price : 0;
+    const price = parseFloat(item.product.price);
     const quantity = typeof item.quantity === "number" ? item.quantity : 0;
 
     return acc + price * quantity;
@@ -55,9 +75,13 @@ const CartForm: React.FC<CartFormProps> = ({ isCheckout = false }) => {
     const size = items[index].size;
 
     if (newQuantity > currentQuantity) {
-      dispatch(incrementQuantity(product.id, size));
+      if (user && user.id) {
+        dispatch(incrementQuantity(user?.id, product.id, size));
+      }
     } else if (newQuantity < currentQuantity && newQuantity >= 1) {
-      dispatch(decrementQuantity(product.id, size));
+      if (user && user.id) {
+        dispatch(decrementQuantity(user?.id, product.id, size));
+      }
     }
   };
 
@@ -84,7 +108,11 @@ const CartForm: React.FC<CartFormProps> = ({ isCheckout = false }) => {
           {items.map((item, index) => (
             <Card
               key={item.product.id + item.size}
-              style={{ display: "flex", marginBottom: "20px", minWidth:"800px" }}
+              style={{
+                display: "flex",
+                marginBottom: "20px",
+                minWidth: "800px",
+              }}
             >
               <CardMedia
                 component="img"
@@ -126,9 +154,17 @@ const CartForm: React.FC<CartFormProps> = ({ isCheckout = false }) => {
 
                 <Typography style={{ margin: "0 20px" }}>
                   Total:{" "}
-                  {Number(item.product.price * item.quantity).toLocaleString()}
+                  {Number(
+                    parseFloat(item.product.price) * item.quantity
+                  ).toLocaleString()}
                   원
                 </Typography>
+
+                {/* <Typography style={{ margin: "0 20px" }}>
+                  Total:{" "}
+                  {Number(item.product.price * item.quantity).toLocaleString()}
+                  원
+                </Typography> */}
               </div>
               <div
                 style={{
@@ -146,16 +182,19 @@ const CartForm: React.FC<CartFormProps> = ({ isCheckout = false }) => {
                     // color: "white",
                     height: "40px",
                   }}
-                  onClick={() =>
-                    dispatch(removeFromCart(item.product.id, item.size))
-                  }
+                  onClick={() => {
+                    if (user && user.id) {
+                      dispatch(
+                        removeFromCart(user?.id, item.product.id, item.size)
+                      );
+                    }
+                  }}
                 >
                   Remove
                 </Button>
               </div>
             </Card>
           ))}
-          
 
           <Typography
             variant="h6"

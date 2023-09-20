@@ -6,11 +6,35 @@ declare global {
   }
 }
 
+export interface CartItem {
+  userId: number;
+  product: IProduct;
+  size: string;
+  quantity: number;
+}
+export interface GoToCheckoutPayload {
+  flow: "cart" | "direct";
+  product: IProduct;
+  size: string;
+  userId: number;
+  quantity: number;
+}
+
+export interface AddToCartPayload extends CartItem {
+  flow: "cart" | "direct";
+}
+
 export type CartState = {
-  cart: any[];
-  singleItem: any;
-  checkoutFlow: string;
+  cart: CartItem[];
+  singleItem: CartItem | null;
+  checkoutFlow: "cart" | "direct";
 };
+
+// export type CartState = {
+//   cart: any[];
+//   singleItem: any;
+//   checkoutFlow: 'cart'|'direct';
+// };
 
 export const GO_TO_CHECKOUT = "GO_TO_CHECKOUT";
 export const ADD_TO_CART = "ADD_TO_CART";
@@ -27,26 +51,26 @@ export interface ResetCheckoutFlowAction {
 }
 export interface GoToCheckoutAction {
   type: typeof GO_TO_CHECKOUT;
-  payload: { flow: string; product: any; size: string };
+  payload: GoToCheckoutPayload
 }
 export interface AddToCartAction {
   type: typeof ADD_TO_CART;
-  payload: { flow: string; product: any; size: string };
+  payload: AddToCartPayload
 }
 
 export interface RemoveFromCartAction {
   type: typeof REMOVE_FROM_CART;
-  payload: { productId: string; size: string };
+  payload: { userId: number; productId: number; size: string };
 }
 
 export interface IncrementQuantityAction {
   type: typeof INCREMENT_QUANTITY;
-  payload: { productId: string; size: string };
+  payload: { userId: number; productId: number; size: string };
 }
 
 export interface DecrementQuantityAction {
   type: typeof DECREMENT_QUANTITY;
-  payload: { productId: string; size: string };
+  payload: { userId: number; productId: number; size: string };
 }
 
 // 모든 액션 타입들을 결합합니다.
