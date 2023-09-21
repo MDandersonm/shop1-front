@@ -5,12 +5,15 @@ import {
   LOGOUT,
   USER_INFO,
   LOGIN_SUCCESS,
+  USERNAME_DUPLICATED,
+  USERNAME_NOT_DUPLICATED,
 } from "../../types/userTypes"; // userTypes.ts에서 타입들을 가져옵니다.
 
 // Initial State
 const initialState: UserState = {
   isLoggedIn: false,
   user: null,
+  isNickNameDuplicated: false,
 };
 
 // Reducer
@@ -41,6 +44,16 @@ export const userReducer = (
       return {
         ...state,
         isLoggedIn: true,
+      };
+    case USERNAME_DUPLICATED:
+      return {
+        ...state,
+        isNickNameDuplicated: true,
+      };
+    case USERNAME_NOT_DUPLICATED:
+      return {
+        ...state,
+        isNickNameDuplicated: false,
       };
     default:
       return state;

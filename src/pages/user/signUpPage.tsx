@@ -1,6 +1,5 @@
 import React from "react";
-import { useState } from "react";
-import { ChangeEvent } from "react";
+import { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -16,13 +15,18 @@ import Container from "@mui/material/Container";
 // import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import { useDispatch } from "react-redux";
-import { signUp } from "../../redux/user/userActions";
+import {
+  checkEmailDuplication,
+  checkNickNameDuplication,
+  signUp,
+} from "../../redux/user/userActions";
 
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { RootState } from "@/redux/reducers";
 import { useNavigate } from "react-router-dom";
 import { FormHelperText } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const Copyright = (props: any) => {
   return (
@@ -59,9 +63,23 @@ export const SignUpPage: React.FC = () => {
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [confirmError, setConfirmError] = useState<string | null>(null);
 
+  const [email, setEmail] = useState("");
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [emailDisabled, setEmailDisabled] = useState(false); //  이메일 입력 필드 비활성화 여부
+  const [emailVerifiedMessage, setEmailVerifiedMessage] = useState<
+    string | null
+  >(null);
+
+  const [username, setUsername] = useState("");
+  const [nickNameMessage, setNickNameMessage] = useState<string | null>(null);
+  const [nickNameColor, setNickNameColor] = useState<string>("red");
+  const [nickNameDisabled, setNickNameDisabled] = useState(false);
+  const [isNickNameDuplicated, setIsNickNameDuplicated] = useState(false);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    console.log( data.get("email"), data.get("password"), data.get("username"))
     const userData = {
       email: data.get("email") as string,
       password: data.get("password") as string,
@@ -75,17 +93,6 @@ export const SignUpPage: React.FC = () => {
   //   password: data.get("password"),
   // });
 
-  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-
-  const checkEmailValidity = (email: string) => {
-    if (emailRegex.test(email)) {
-      setEmailValid(true);
-      setEmailError(null);
-    } else {
-      setEmailValid(false);
-      setEmailError("이메일 형식에 맞지 않습니다.");
-    }
-  };
   const passwordRegex =
     /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
 
@@ -98,6 +105,52 @@ export const SignUpPage: React.FC = () => {
       setPasswordError(
         "패스워드는 영어, 숫자, 특수문자로 구성되어야 하며 8자 이상이어야 합니다."
       );
+    }
+  };
+
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    checkEmailValidity(e.target.value);
+  };
+  const checkEmailValidity = (email: string) => {
+    if (emailRegex.test(email)) {
+      setEmailValid(true);
+      setEmailError(null);
+    } else {
+      setEmailValid(false);
+      setEmailError("이메일 형식에 맞지 않습니다.");
+    }
+  };
+  const handleCheckEmailDuplication = async () => {
+    const result = await dispatch(checkEmailDuplication(email));
+    console.log("result", result);
+    if (result && !result.duplicated) {
+      //중복되지않은경우
+
+      setIsEmailVerified(true);
+      setEmailDisabled(true); // 중복되지 않았을 때, 입력 필드를 비활성화
+      setEmailVerifiedMessage("사용 가능한 이메일입니다.");
+    } else {
+      setEmailError("이메일이 이미 사용 중입니다."); // 중복될 때 에러 메시지 설정
+      setEmailVerifiedMessage(null);
+    }
+  };
+  const handleVerifyNickname = async () => {
+    console.log("username", username);
+    const result = await dispatch(checkNickNameDuplication(username));
+    console.log("result", result);
+    if (result && !result.duplicated) {
+      //중복되지않은경우
+      setIsNickNameDuplicated(false);
+      setNickNameMessage("사용 가능합니다.");
+      setNickNameColor("green");
+      setNickNameDisabled(true);
+    } else {
+      setIsNickNameDuplicated(true);
+      setNickNameMessage("중복되었습니다.");
+      setNickNameColor("red");
     }
   };
 
@@ -151,6 +204,12 @@ export const SignUpPage: React.FC = () => {
                 id="username"
                 label="Nick Name"
                 autoFocus
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                error={isNickNameDuplicated}
+                helperText={nickNameMessage} // 닉네임 중복 체크 메시지 출력
+                FormHelperTextProps={{ style: { color: nickNameColor } }}
+                inputProps={{ readOnly: nickNameDisabled }}// 닉네임 필드 활성화/비활성화
               />
             </Grid>
             <Grid item xs={5}>
@@ -160,10 +219,9 @@ export const SignUpPage: React.FC = () => {
                 variant="contained"
                 color="primary"
                 sx={{ height: 50 }}
-                // TODO: 이메일 인증 함수 추가
-                onClick={() => {}}
+                onClick={handleVerifyNickname}
               >
-                Verify Email
+                VERIFY NICK
               </Button>
             </Grid>
 
@@ -175,10 +233,16 @@ export const SignUpPage: React.FC = () => {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                onChange={(e) => checkEmailValidity(e.target.value)}
+                onChange={handleEmailChange}
+                error={!!emailError} // 이메일 에러가 있을 때, 필드에 에러 표시
+                helperText={emailError} // 에러 메시지 출력
+                inputProps={{ readOnly: emailDisabled }} /// 이메일 입력 필드의 활성화/비활성화 상태 설정
               />
-              {emailError && (
-                <FormHelperText error>{emailError}</FormHelperText>
+
+              {emailVerifiedMessage && (
+                <FormHelperText style={{ color: "green" }}>
+                  {emailVerifiedMessage}
+                </FormHelperText>
               )}
             </Grid>
             <Grid item xs={5}>
@@ -188,8 +252,7 @@ export const SignUpPage: React.FC = () => {
                 variant="contained"
                 color="primary"
                 sx={{ height: 50 }}
-                // TODO: 이메일 인증 함수 추가
-                onClick={() => {}}
+                onClick={handleCheckEmailDuplication} // 이메일 중복 체크 함수 호출
               >
                 Verify Email
               </Button>
@@ -254,7 +317,14 @@ export const SignUpPage: React.FC = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
             disabled={
-              !(emailValid && passwordValid && confirmValid && termsAccepted)
+              !(
+                emailValid &&
+                passwordValid &&
+                isEmailVerified &&
+                confirmValid &&
+                termsAccepted &&
+                !isNickNameDuplicated
+              )
             }
           >
             Sign Up

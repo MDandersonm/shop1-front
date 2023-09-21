@@ -136,3 +136,15 @@ export const checkLoginStatus = () => {
     }
   };
 };
+
+export const checkEmailDuplication = (email: string) => async (dispatch: Dispatch) => {
+  const response = await mainRequest.post(`/user/check-email/${email}`);
+  return response.data; // 예를 들면, { duplicated: true }
+};
+
+export const checkNickNameDuplication = (username: string) => async (dispatch: Dispatch) => {
+
+      const response = await mainRequest.post(`/user/check-username/${username}` );
+      return response.data;
+};
+
