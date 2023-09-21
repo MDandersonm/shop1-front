@@ -1,6 +1,6 @@
 import React from 'react';
 import { Carousel } from 'react-responsive-carousel';
-import { IProduct } from '../../redux/types/productTypes';
+import { IProduct } from '../../types/productTypes';
 import ProductCard from '../product/productCardForm';
 
 interface ProductCarouselProps {

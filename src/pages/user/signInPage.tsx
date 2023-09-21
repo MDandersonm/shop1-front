@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { RootState } from "@/redux/reducers";
-import { signIn } from "../../redux/actions/userActions";
+import { signIn } from "../../redux/user/userActions";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 

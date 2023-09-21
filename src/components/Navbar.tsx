@@ -6,7 +6,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ActiveNavLink from "./ActiveNavLink";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/reducers";
-import { checkUser, logout } from "../redux/actions/userActions";
+import { checkUser, logout } from "../redux/user/userActions";
 import { AppDispatch } from "../index";
 const Navbar: React.FC = () => {
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);

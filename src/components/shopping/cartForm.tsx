@@ -14,10 +14,10 @@ import {
   removeFromCart,
   incrementQuantity,
   decrementQuantity,
-} from "../../redux/actions/shoppingActions";
+} from "../../redux/shopping/shoppingActions";
 import { useNavigate } from "react-router-dom";
-import { CartFormProps, CartItem } from "../../redux/types/shoppingTypes";
-import { checkUser } from "../../redux/actions/userActions";
+import { CartFormProps, CartItem } from "../../types/shoppingTypes";
+import { checkUser } from "../../redux/user/userActions";
 
 const CartForm: React.FC<CartFormProps> = ({ isCheckout = false }) => {
   const dispatch: Dispatch<any> = useDispatch();

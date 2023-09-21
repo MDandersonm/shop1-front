@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Button, TextField, Box, CardMedia, Typography } from "@mui/material";
-import { IProduct } from "../../redux/types/productTypes";
+import { IProduct } from "../../types/productTypes";
 import { useDispatch } from "react-redux";
-import { saveProduct } from "../../redux/actions/productActions";
+import { saveProduct } from "../../redux/product/productActions";
 
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";

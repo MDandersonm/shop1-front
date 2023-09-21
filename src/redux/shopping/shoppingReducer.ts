@@ -7,7 +7,7 @@ import {
   REMOVE_FROM_CART,
   RESET_CHECKOUT_FLOW,
   ShoppingCartActions,
-} from "../types/shoppingTypes";
+} from "../../types/shoppingTypes";
 
 const initialState: CartState = {
   cart: [],

@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import PrivateRoute from "./router/privateRoute";
 import { useDispatch } from "react-redux";
-import { checkLoginStatus } from "./redux/actions/userActions";
+import { checkLoginStatus } from "./redux/user/userActions";
 
 type RouteType = {
   path: string;

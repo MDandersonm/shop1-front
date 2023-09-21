@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Button, TextField, Box, CardMedia, Typography } from "@mui/material";
-import { IProduct } from "../../redux/types/productTypes";
+import { IProduct } from "../../types/productTypes";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchProduct,
   updateProduct,
-} from "../../redux/actions/productActions";
+} from "../../redux/product/productActions";
 
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";

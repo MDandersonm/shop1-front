@@ -7,9 +7,9 @@ import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 
 import axios, { AxiosError } from "axios";
-import { GO_TO_CHECKOUT,ADD_TO_CART, DECREMENT_QUANTITY, INCREMENT_QUANTITY, REMOVE_FROM_CART, RESET_CHECKOUT_FLOW } from "../types/shoppingTypes";
+import { GO_TO_CHECKOUT,ADD_TO_CART, DECREMENT_QUANTITY, INCREMENT_QUANTITY, REMOVE_FROM_CART, RESET_CHECKOUT_FLOW } from "../../types/shoppingTypes";
 import { Dispatch } from "redux";
-import { IProduct } from "../types/productTypes";
+import { IProduct } from "../../types/productTypes";
 
 export const resetCheckoutFlow = () => {
   return {

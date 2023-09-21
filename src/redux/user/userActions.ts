@@ -9,7 +9,7 @@ import {
   LOGOUT,
   USER_INFO,
   LOGIN_SUCCESS,
-} from "../types/userTypes"; // userTypes.ts에서 타입들을 가져옵니다.
+} from "../../types/userTypes"; // userTypes.ts에서 타입들을 가져옵니다.
 import mainRequest from "../../api/mainRequest";
 
 export const checkUser =

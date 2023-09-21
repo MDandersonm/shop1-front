@@ -2,7 +2,7 @@ import React, { useEffect, Dispatch } from "react";
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { checkUser } from "../redux/actions/userActions";
+import { checkUser } from "../redux/user/userActions";
 
 const PrivateRoute: React.FC<any> = ({ children, allowedRoles }) => {
   const dispatch: Dispatch<any> = useDispatch();

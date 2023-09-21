@@ -1,9 +1,9 @@
-import { addToCart, goToCheckOut } from "../../redux/actions/shoppingActions";
+import { addToCart, goToCheckOut } from "../../redux/shopping/shoppingActions";
 import {
   deleteProduct,
   fetchProduct,
   fetchProducts,
-} from "../../redux/actions/productActions";
+} from "../../redux/product/productActions";
 import { RootState } from "@/redux/reducers";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import EditIcon from "@mui/icons-material/Edit";
@@ -33,7 +33,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { checkUser } from "../../redux/actions/userActions";
+import { checkUser } from "../../redux/user/userActions";
 
 import thunk, { ThunkDispatch } from "redux-thunk";
 

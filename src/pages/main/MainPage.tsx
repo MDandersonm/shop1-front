@@ -4,7 +4,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // Carousel 스�
 import "./mainPage.css";
 import { useSelector, useDispatch } from "react-redux";
 import ProductCarousel from "../../components/main/ProductCarousel"; // 새로운 컴포넌트를 임포트 합니다.
-import { fetchProducts } from "../../redux/actions/productActions";
+import { fetchProducts } from "../../redux/product/productActions";
 
 const MainPage: React.FC = () => {
   const products = useSelector((state: any) => state.product.products);

@@ -16,7 +16,7 @@ import Container from "@mui/material/Container";
 // import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import { useDispatch } from "react-redux";
-import { signUp } from "../../redux/actions/userActions";
+import { signUp } from "../../redux/user/userActions";
 
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';

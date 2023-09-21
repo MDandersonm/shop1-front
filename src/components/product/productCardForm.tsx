@@ -8,7 +8,7 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import { IProduct } from "../../redux/types/productTypes";
+import { IProduct } from "../../types/productTypes";
 import { useNavigate } from "react-router-dom";
 
 interface ProductCardProps {

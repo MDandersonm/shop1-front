@@ -21,7 +21,7 @@ import {
   DELETE_PRODUCT,
   DELETE_PRODUCT_SUCCESS,
   DELETE_PRODUCT_FAILURE,
-} from "../types/productTypes";
+} from "../../types/productTypes";
 import axios, { AxiosError } from "axios";
 
 interface ApiResponse {

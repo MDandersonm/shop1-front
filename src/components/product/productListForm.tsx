@@ -12,10 +12,10 @@ import {
   Tab,
   SelectChangeEvent,
 } from "@mui/material";
-import { IProduct } from "../../redux/types/productTypes";
+import { IProduct } from "../../types/productTypes";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { fetchProducts } from "../../redux/actions/productActions";
+import { fetchProducts } from "../../redux/product/productActions";
 import ProductCard from "./productCardForm";
 
 const ProductListForm: React.FC = () => {
