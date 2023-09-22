@@ -1,8 +1,10 @@
 import { addToCart, goToCheckOut } from "../../redux/shopping/shoppingActions";
 import {
+  checkWishlist,
   deleteProduct,
   fetchProduct,
   fetchProducts,
+  toggleWishlist,
 } from "../../redux/product/productActions";
 import { RootState } from "@/redux/reducers";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -67,6 +69,8 @@ const ProductDetailForm: React.FC = () => {
 
   const [openDialog, setOpenDialog] = React.useState(false);
 
+  const [isInWishlist, setIsInWishlist] = React.useState(false);
+
   const handleButtonClick = (action: () => void) => {
     if (isLoggedIn) {
       action();
@@ -98,11 +102,25 @@ const ProductDetailForm: React.FC = () => {
       alert("product가 null입니다");
     }
   };
+  useEffect(() => {
+    dispatch(checkUser());//user상태 업데이트
+}, [dispatch]);
+//    dispatch(checkUser()); 여기서 user정보를 업데이트해서 state에 넣은후 그 user를 checkProductInWishlist에서 이용해야되는데 그걸 어떻게하지?
+//useEffect를 둘로 나누면된다.
 
   useEffect(() => {
-    dispatch(checkUser());
     dispatch(fetchProduct(productId));
-  }, [dispatch, productId]);
+    const checkProductInWishlist = async () => {
+      console.log("user",user);
+      if (user && user.id) {
+        const result = await checkWishlist(user.id, productId);
+        console.log("result2", result);
+        setIsInWishlist(result);
+      }
+    };
+
+    checkProductInWishlist();
+  }, [dispatch, productId,user]);
 
   const handleUpdateClick = (productId: number) => {
     navigate(`/product-update/${productId}`);
@@ -118,6 +136,26 @@ const ProductDetailForm: React.FC = () => {
       });
 
     navigate(`/product-list`);
+  };
+
+  const handleWishlistToggle = () => {
+    if (product) {
+      if (user && user.id) {
+        (dispatch(toggleWishlist(user.id, product.id)) as any)
+          .then((isAdded: boolean) => {
+            if (isAdded) {
+              setIsInWishlist(true);
+            } else {
+              setIsInWishlist(false);
+            }
+          })
+          .catch((error: Error) => {
+            toast.error("관심상품 처리 중 오류: " + error.message);
+          });
+      }
+    } else {
+      alert("product가 null입니다");
+    }
   };
 
   if (loading) return <CircularProgress />;
@@ -209,12 +247,10 @@ const ProductDetailForm: React.FC = () => {
                   바로구매
                 </Button>
                 <Button
-                  variant="outlined"
+                  variant={isInWishlist ? "contained" : "outlined"}
+                  color="secondary"
                   onClick={() => {
-                    // 관심상품에 대한 로직 추가 필요
-                    handleButtonClick(() => {
-                      // 로그인이 되어 있을 때 수행될 관심상품 로직
-                    });
+                    handleButtonClick(handleWishlistToggle);
                   }}
                 >
                   관심상품

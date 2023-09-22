@@ -23,6 +23,7 @@ import {
   DELETE_PRODUCT_FAILURE,
 } from "../../types/productTypes";
 import axios, { AxiosError } from "axios";
+import { AppDispatch } from "@/index";
 
 interface ApiResponse {
   message: string;
@@ -253,3 +254,93 @@ export const deleteProduct =
       }
     });
   };
+
+type MyThunkAction = ThunkAction<Promise<any>, RootState, undefined, AnyAction>;
+
+export const toggleWishlist = (
+  userId: number,
+  productId: number
+): MyThunkAction => {
+  return async (dispatch: AppDispatch) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      };
+
+      const response = await mainRequest.post(
+        `/wishlist/useronly/toggle/${userId}/${productId}`,
+        config
+      );
+
+      if (response.status === 201) {
+        toast.success("관심상품에 추가되었습니다!");
+        return true;
+      } else if (response.status === 204) {
+        toast.success("관심상품에서 제거되었습니다!");
+        return false;
+      }
+
+      return null;
+    } catch (error: any) {
+      console.log("error.response ", error.response);
+      console.log("error.response.data ", error.response.data);
+      console.log("error.response.data.message ", error.response.data.message);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        throw new Error(error.response.data.message);
+      } else {
+        throw new Error("서버에서 오류가 발생했습니다.");
+      }
+    }
+  };
+};
+
+export const fetchWishlistProducts = (userId: number) => {
+  return async (dispatch: AppDispatch) => {
+    dispatch({ type: "PRODUCTS_FETCH_REQUEST" });
+
+    try {
+      const config = {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      };
+      const response = await mainRequest.get(
+        `/wishlist/useronly/list/${userId}`,
+        config
+      );
+
+      dispatch({
+        type: "WISHLIST_FETCH_SUCCESS",
+        payload: response.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: "WISHLIST_FETCH_ERROR",
+        payload: (error as Error).message,
+      });
+    }
+  };
+};
+export const checkWishlist = async (userId: number, productId: number) => {
+  try {
+    const config = {
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+    };
+
+    const response = await mainRequest.get(
+      `/wishlist/useronly/check/${userId}/${productId}`,
+      config
+    );
+    return response.data;
+  } catch (error) {
+    console.error("관심상품 확인 오류:", error);
+  }
+};

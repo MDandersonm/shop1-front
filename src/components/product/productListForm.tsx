@@ -13,15 +13,17 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { IProduct } from "../../types/productTypes";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { fetchProducts } from "../../redux/product/productActions";
+
 import ProductCard from "./productCardForm";
 
-const ProductListForm: React.FC = () => {
+interface ProductListFormProps {
+  products: IProduct[];
+}
+
+const ProductListForm: React.FC<ProductListFormProps> = ({ products }) => {
   // const [products, setProducts] = useState<IProduct[]>([]);
-  const products = useSelector((state: any) => state.product.products);
-  const dispatch: Dispatch<any> = useDispatch();
+
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
@@ -29,9 +31,7 @@ const ProductListForm: React.FC = () => {
   const [searchName, setSearchName] = useState<string>("");
   const [sortOrder, setSortOrder] = useState("latest");
 
-  useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
+
 
   // useEffect(() => {
   //   mainRequest.post("/products/list")

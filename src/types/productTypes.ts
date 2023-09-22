@@ -15,7 +15,6 @@ export interface IProduct {
 //   price: string;
 // }
 
-
 // Action Types
 export const SAVE_PRODUCT_REQUEST = "SAVE_PRODUCT_REQUEST";
 export const SAVE_PRODUCT_SUCCESS = "SAVE_PRODUCT_SUCCESS";
@@ -32,6 +31,10 @@ export const FETCH_PRODUCT_FAILURE = "FETCH_PRODUCT_FAILURE";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const DELETE_PRODUCT_SUCCESS = "DELETE_PRODUCT_SUCCESS";
 export const DELETE_PRODUCT_FAILURE = "DELETE_PRODUCT_FAILURE";
+
+export const WISHLIST_FETCH_REQUEST = "WISHLIST_FETCH_REQUEST";
+export const WISHLIST_FETCH_SUCCESS = "WISHLIST_FETCH_SUCCESS";
+export const WISHLIST_FETCH_ERROR = "WISHLIST_FETCH_ERROR";
 export interface ProductState {
   loading: boolean;
   product: IProduct | null;
@@ -89,10 +92,27 @@ interface DeleteProductSuccessAction {
 
 interface DeleteProductFailtureAction {
   type: typeof DELETE_PRODUCT_FAILURE;
-  error: string;  
+  error: string;
+}
+
+interface FetchWishlistRequestAction {
+  type: typeof WISHLIST_FETCH_REQUEST;
+}
+
+interface FetchWishlistSuccessAction {
+  type: typeof WISHLIST_FETCH_SUCCESS;
+  payload: IProduct[]; 
+}
+
+interface FetchWishlistErrorAction {
+  type: typeof WISHLIST_FETCH_ERROR;
+  payload: string;
 }
 
 export type ProductActionTypes =
+  | FetchWishlistRequestAction
+  | FetchWishlistErrorAction
+  | FetchWishlistSuccessAction
   | DeleteProductAction
   | DeleteProductSuccessAction
   | DeleteProductFailtureAction

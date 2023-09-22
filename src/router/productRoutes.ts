@@ -3,6 +3,7 @@ import ProductListPage from "../pages/product/productListPage";
 import ProductRegisterPage from "../pages/product/productRegisterPage";
 import ProductDetailPage from "../pages/product/productDetailPage";
 import ProductUpdatePage from "../pages/product/productUpdatePage";
+import WishListPage from "../pages/product/wishListPage";
 
 // allowedRoles: ['user', 'admin'] // 회원 및 관리자 접근 가능
 
@@ -28,6 +29,11 @@ const productRoutes = [
   {
     path: "/userOnly/product-test",
     component: productTest,
+  },
+  {
+    path: "/wishlist",
+    component: WishListPage,
+    allowedRoles: ['ROLE_ADMIN' , 'ROLE_USER']
   },
 
 

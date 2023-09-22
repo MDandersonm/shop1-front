@@ -13,6 +13,9 @@ import {
   DELETE_PRODUCT,
   DELETE_PRODUCT_SUCCESS,
   DELETE_PRODUCT_FAILURE,
+  WISHLIST_FETCH_REQUEST,
+  WISHLIST_FETCH_SUCCESS,
+  WISHLIST_FETCH_ERROR,
 } from "../../types/productTypes";
 
 const initialState: ProductState = {
@@ -71,23 +74,33 @@ export const productReducer = (
       return { ...state, loading: false, product: action.payload };
     case FETCH_PRODUCT_FAILURE:
       return { ...state, loading: false, error: action.error };
-      case DELETE_PRODUCT:
-        return {
-          ...state,
-          loading: true,
-        };
-      case DELETE_PRODUCT_SUCCESS:
-        return {
-          ...state,
-          loading: false,
-          products: state.products.filter(product => product.id !== action.payload),  // 삭제된 상품 제거
-        };
-      case DELETE_PRODUCT_FAILURE:
-        return {
-          ...state,
-          loading: false,
-          error: action.error,
-        };
+    case DELETE_PRODUCT:
+      return {
+        ...state,
+        loading: true,
+      };
+    case DELETE_PRODUCT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        products: state.products.filter(
+          (product) => product.id !== action.payload
+        ), // 삭제된 상품 제거
+      };
+    case DELETE_PRODUCT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      };
+
+    case WISHLIST_FETCH_REQUEST:
+      return { ...state, loading: true };
+    case WISHLIST_FETCH_SUCCESS:
+      return { ...state, loading: false, products: action.payload };
+    case WISHLIST_FETCH_ERROR:
+      return { ...state, loading: false, error: action.payload };
+
     default:
       return state;
   }
