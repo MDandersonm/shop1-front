@@ -7,7 +7,7 @@ import {
   LOGIN_SUCCESS,
   USERNAME_DUPLICATED,
   USERNAME_NOT_DUPLICATED,
-} from "../../types/userTypes"; // userTypes.ts에서 타입들을 가져옵니다.
+} from "../../types/userTypes"; 
 
 // Initial State
 const initialState: UserState = {

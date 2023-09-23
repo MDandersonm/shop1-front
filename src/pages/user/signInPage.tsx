@@ -50,12 +50,35 @@ const SignInPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch: ThunkDispatch<RootState, unknown, AnyAction> = useDispatch();
   const user = useSelector((state: RootState) => state.user); // Get the current user state
+
+  const [rememberMe, setRememberMe] = React.useState<boolean>(
+    localStorage.getItem("rememberedEmail") !== null
+    // 초기화할 때 rememberMe의 초기 상태를 로컬스토리지에 이메일이 있으면 true
+  );
+  
+  const [storedEmail, setStoredEmail] = React.useState<string | null>(
+    localStorage.getItem("rememberedEmail")//초기값설정
+  );
+  
+
   React.useEffect(() => {
+    console.log("렌더링")
     //로그인이 성공하면 메인페이지로 이동
     if (user.isLoggedIn) {
       navigate("/");
     }
-  }, [user.isLoggedIn, navigate]);
+    const rememberedEmail = localStorage.getItem("rememberedEmail");
+    if (rememberedEmail) {
+      setStoredEmail(rememberedEmail);
+    }
+    console.log("rememberedEmail",rememberedEmail)
+  }, [user.isLoggedIn, navigate,storedEmail]);
+
+  const handleRememberMeChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRememberMe(event.target.checked);
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -69,18 +92,22 @@ const SignInPage: React.FC = () => {
     console.log("userData:", userData);
     await dispatch(signIn(userData));
     console.log("user.isLoggedIn:", user.isLoggedIn);
+
+    if (rememberMe) {
+      localStorage.setItem("rememberedEmail", userData.email);
+    } else {
+      localStorage.removeItem("rememberedEmail");
+    }
   };
 
   // const handleGoogleLogin = async () => {
   // };
-  
+
   // const handleFacebookLogin = () => {
   // };
-  
+
   // const handleNaverLogin =async () => {
   // };
-
-
 
   return (
     // <ThemeProvider theme={defaultTheme}>
@@ -107,6 +134,7 @@ const SignInPage: React.FC = () => {
           sx={{ mt: 1 }}
         >
           <TextField
+            defaultValue={storedEmail} // 로컬 스토리지에서 가져온 이메일 사용
             margin="normal"
             required
             fullWidth
@@ -127,7 +155,14 @@ const SignInPage: React.FC = () => {
             autoComplete="current-password"
           />
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
+            control={
+              <Checkbox
+                checked={rememberMe}
+                onChange={handleRememberMeChange}
+                value="remember"
+                color="primary"
+              />
+            }
             label="Remember me"
           />
           <Button
@@ -145,7 +180,7 @@ const SignInPage: React.FC = () => {
               </MUILink>
             </Grid>
             <Grid item>
-              <MUILink href="#" variant="body2">
+              <MUILink href="/sign-up" variant="body2">
                 {"Don't have an account? Sign Up"}
               </MUILink>
             </Grid>

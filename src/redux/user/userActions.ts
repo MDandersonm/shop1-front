@@ -96,6 +96,7 @@ export const signIn =
       alert("로그인 성공");
       //로그인 후 사용자정보 state에 넣기, 토큰이용한 검증
     } catch (error) {
+      alert("비밀번호가 틀렸습니다.")
       console.log("sign in 실패!");
       console.error(error);
     }
