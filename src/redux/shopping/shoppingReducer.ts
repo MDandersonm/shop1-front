@@ -1,5 +1,6 @@
 import {
   ADD_TO_CART,
+  CLEAR_CART,
   CartState,
   DECREMENT_QUANTITY,
   GO_TO_CHECKOUT,
@@ -8,11 +9,19 @@ import {
   RESET_CHECKOUT_FLOW,
   ShoppingCartActions,
 } from "../../types/shoppingTypes";
+import {
+  SAVE_ORDER_FAIL,
+  SAVE_ORDER_REQUEST,
+  SAVE_ORDER_SUCCESS,
+} from "./shoppingActions";
 
 const initialState: CartState = {
   cart: [],
   singleItem: null,
   checkoutFlow: "cart",
+  loading: false,
+  data: null,
+  error: null,
 };
 
 export const shoppingReducer = (
@@ -35,7 +44,7 @@ export const shoppingReducer = (
 
     case ADD_TO_CART:
       const existingProductIndex = state.cart.findIndex(
-        item =>
+        (item) =>
           item.userId === action.payload.userId &&
           item.product.id === action.payload.product.id &&
           item.size === action.payload.size
@@ -83,7 +92,7 @@ export const shoppingReducer = (
       return {
         ...state,
         cart: state.cart.map((item) =>
-        item.userId === action.payload.userId &&
+          item.userId === action.payload.userId &&
           item.product.id === action.payload.productId &&
           item.size === action.payload.size
             ? { ...item, quantity: item.quantity + 1 }
@@ -94,13 +103,26 @@ export const shoppingReducer = (
       return {
         ...state,
         cart: state.cart.map((item) =>
-        item.userId === action.payload.userId &&
+          item.userId === action.payload.userId &&
           item.product.id === action.payload.productId &&
           item.size === action.payload.size &&
           item.quantity > 1
             ? { ...item, quantity: item.quantity - 1 }
             : item
         ),
+      };
+
+    case SAVE_ORDER_REQUEST:
+      return { ...state, loading: true };
+    case SAVE_ORDER_SUCCESS:
+      return { ...state, loading: false, data: action.payload };
+    case SAVE_ORDER_FAIL:
+      return { ...state, loading: false, error: action.error };
+
+    case CLEAR_CART:
+      return {
+        ...state,
+        cart: state.cart.filter(item => item.userId !== action.payload)
       };
     default:
       return state;

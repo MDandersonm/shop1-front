@@ -1,4 +1,4 @@
-// CartPage.tsx
+// CartPage.tsx자식
 import React, { Dispatch, useEffect, useState } from "react";
 import {
   Card,
@@ -19,7 +19,15 @@ import { useNavigate } from "react-router-dom";
 import { CartFormProps, CartItem } from "../../types/shoppingTypes";
 import { checkUser } from "../../redux/user/userActions";
 
-const CartForm: React.FC<CartFormProps> = ({ isCheckout = false }) => {
+const CartForm: React.FC<CartFormProps> = ({
+  isCheckout = false,
+  setTotalPrice: externalSetTotalPrice,
+  setUser,  
+  updateItems,
+}) => {
+  const [localTotalPrice, setLocalTotalPrice] = useState<number>(0);
+  const actualSetTotalPrice = externalSetTotalPrice || setLocalTotalPrice;
+
   const dispatch: Dispatch<any> = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.user.user);
@@ -35,9 +43,18 @@ const CartForm: React.FC<CartFormProps> = ({ isCheckout = false }) => {
   );
 
   const [items, setItems] = useState(cartItemsFromState); // 로컬 상태로 항목들을 관리
+  const totalPrice = items.reduce((acc, item) => {
+    const price = parseFloat(item.product.price);
+    const quantity = typeof item.quantity === "number" ? item.quantity : 0;
+
+    return acc + price * quantity;
+  }, 0);
 
   useEffect(() => {
+    actualSetTotalPrice(totalPrice);
+
     if (user && user.id) {
+      setUser?.(user);
       dispatch(checkUser());
       let relevantItems: CartItem[] = [];
 
@@ -54,8 +71,16 @@ const CartForm: React.FC<CartFormProps> = ({ isCheckout = false }) => {
       if (JSON.stringify(relevantItems) !== JSON.stringify(items)) {
         setItems(relevantItems);
       }
+      updateItems?.(relevantItems);
     }
-  }, [checkoutFlow, cartItemsFromState, singleItem, dispatch]);
+  }, [
+    checkoutFlow,
+    cartItemsFromState,
+    singleItem,
+    dispatch,
+    totalPrice,
+    actualSetTotalPrice,
+  ]);
 
   // const totalPrice = items.reduce((acc, item) => {
   //   const price =
@@ -64,12 +89,6 @@ const CartForm: React.FC<CartFormProps> = ({ isCheckout = false }) => {
 
   //   return acc + price * quantity;
   // }, 0);
-  const totalPrice = items.reduce((acc, item) => {
-    const price = parseFloat(item.product.price);
-    const quantity = typeof item.quantity === "number" ? item.quantity : 0;
-
-    return acc + price * quantity;
-  }, 0);
 
   const handleQuantityChange = (index: number, newQuantity: number) => {
     const product = items[index].product;
