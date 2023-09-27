@@ -84,7 +84,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = () => {
             dispatch(clearCart(actualUser.id));
             let msg = "결제가 완료되었습니다.";
             alert(msg);
-            navigate("/");
+            navigate("/order-list");
           }
         
           

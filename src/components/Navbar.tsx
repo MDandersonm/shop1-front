@@ -101,6 +101,21 @@ const Navbar: React.FC = () => {
                 ""
               )}
             </li>
+            <li className="nav-item mx-5" style={{ width: "100px" }}>
+              {isLoggedIn ? (
+                <ActiveNavLink
+                  to="/order-list"
+                  activeClassName="active-link"
+                  className="nav-link"
+                >
+                  <span className="h5" style={{ fontWeight: "bold" }}>
+                    주문 목록
+                  </span>
+                </ActiveNavLink>
+              ) : (
+                ""
+              )}
+            </li>
             {/* <li className="nav-item mx-5">
               <NavLink className="nav-link" to="/userOnly/product-test">
                 <span className="h5" style={{ fontWeight: "bold" }}>

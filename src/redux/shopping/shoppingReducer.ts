@@ -3,10 +3,12 @@ import {
   CLEAR_CART,
   CartState,
   DECREMENT_QUANTITY,
+  FETCH_ORDERS,
   GO_TO_CHECKOUT,
   INCREMENT_QUANTITY,
   REMOVE_FROM_CART,
   RESET_CHECKOUT_FLOW,
+  SELECT_ORDER,
   ShoppingCartActions,
 } from "../../types/shoppingTypes";
 import {
@@ -22,6 +24,9 @@ const initialState: CartState = {
   loading: false,
   data: null,
   error: null,
+  orders: [],
+  selectedOrder: undefined,  
+
 };
 
 export const shoppingReducer = (
@@ -122,7 +127,14 @@ export const shoppingReducer = (
     case CLEAR_CART:
       return {
         ...state,
-        cart: state.cart.filter(item => item.userId !== action.payload)
+        cart: state.cart.filter((item) => item.userId !== action.payload),
+      };
+    case FETCH_ORDERS:
+      return { ...state, orders: action.payload };
+    case SELECT_ORDER:
+      return {
+        ...state,
+        selectedOrder: action.payload,
       };
     default:
       return state;

@@ -15,6 +15,10 @@ import {
   REMOVE_FROM_CART,
   RESET_CHECKOUT_FLOW,
   CLEAR_CART,
+  FETCH_ORDERS,
+  SELECT_ORDER,
+  IOrderInfo,
+  SelectOrderAction,
 } from "../../types/shoppingTypes";
 import { Dispatch } from "redux";
 import { IProduct } from "../../types/productTypes";
@@ -107,5 +111,27 @@ export const clearCart =(userId: number)  => {
         payload: userId
     };
 };
+export const fetchOrders = () => async (dispatch:any) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token"),
+      },
+    };
+    console.log("fetch order 진입")
+    const response = await mainRequest.get("/orders/onlyuser/list",config);
+    console.log("order response",response.data)
+    dispatch({ type: FETCH_ORDERS, payload: response.data });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+  }
+};
+export const selectOrder = (order: IOrderInfo): SelectOrderAction => ({
+  type: SELECT_ORDER,
+  payload: order,
+});
+
+
 
 
