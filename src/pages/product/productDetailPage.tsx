@@ -1,7 +1,7 @@
 import ProductDetailForm from "../../components/product/productDetailForm";
 import React from "react";
 
-const ProductListPage: React.FC = () => {
+const ProductDetailPage: React.FC = () => {
 
   return (
     <div className="container mt-5">
@@ -10,4 +10,4 @@ const ProductListPage: React.FC = () => {
   );
 };
 
-export default ProductListPage;
+export default ProductDetailPage;

@@ -270,7 +270,7 @@ export const toggleWishlist = (
       };
 
       const response = await mainRequest.post(
-        `/wishlist/useronly/toggle/${userId}/${productId}`,
+        `/wishlist/onlyuser/toggle/${userId}/${productId}`,'',
         config
       );
 
@@ -311,7 +311,7 @@ export const fetchWishlistProducts = (userId: number) => {
         },
       };
       const response = await mainRequest.get(
-        `/wishlist/useronly/list/${userId}`,
+        `/wishlist/onlyuser/list/${userId}`,
         config
       );
 
@@ -336,7 +336,7 @@ export const checkWishlist = async (userId: number, productId: number) => {
     };
 
     const response = await mainRequest.get(
-      `/wishlist/useronly/check/${userId}/${productId}`,
+      `/wishlist/onlyuser/check/${userId}/${productId}`,
       config
     );
     return response.data;

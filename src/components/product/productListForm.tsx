@@ -31,8 +31,6 @@ const ProductListForm: React.FC<ProductListFormProps> = ({ products }) => {
   const [searchName, setSearchName] = useState<string>("");
   const [sortOrder, setSortOrder] = useState("latest");
 
-
-
   // useEffect(() => {
   //   mainRequest.post("/products/list")
   //     .then(response => {

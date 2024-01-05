@@ -10,7 +10,12 @@ export interface IProduct {
   image?: string;
   detailImages?: IProductDetailImage[];
 }
-
+export interface ProductState {
+  loading: boolean;
+  product: IProduct | null;
+  products: IProduct[];
+  error: string | null;
+}
 // export interface IProductFormState extends Omit<IProduct, 'price'> {
 //   price: string;
 // }
@@ -35,12 +40,7 @@ export const DELETE_PRODUCT_FAILURE = "DELETE_PRODUCT_FAILURE";
 export const WISHLIST_FETCH_REQUEST = "WISHLIST_FETCH_REQUEST";
 export const WISHLIST_FETCH_SUCCESS = "WISHLIST_FETCH_SUCCESS";
 export const WISHLIST_FETCH_ERROR = "WISHLIST_FETCH_ERROR";
-export interface ProductState {
-  loading: boolean;
-  product: IProduct | null;
-  products: IProduct[];
-  error: string | null;
-}
+
 
 interface SaveProductRequestAction {
   type: typeof SAVE_PRODUCT_REQUEST;
